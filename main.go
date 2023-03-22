@@ -1,9 +1,10 @@
 package main
 
 import (
-	"github.com/jadenHsiao/poscom/utils"
+	"github.com/jadenHsiao/poscom/src/kernels"
 )
 
 func main() {
-	utils.PrintNow()
+	a := new(kernels.Gainscha)
+	a.A()
 }
