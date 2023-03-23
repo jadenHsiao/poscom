@@ -37,9 +37,20 @@ func (gainscha *Gainscha) initialize() {
 	gainscha.Api.Initialize()
 }
 
-//func (gainscha *Gainscha) securityCode() string {
 //
-//}
+// securityCode
+//  @Description: 根据官方规则创建秘钥
+//  @receiver gainscha
+//  @param args
+//  @return string
+//
+func (gainscha *Gainscha) securityCode(args ...string) string {
+	var beforeStr string
+	for _, val := range args {
+		beforeStr += val
+	}
+	return src.Md5(beforeStr)
+}
 
 func (gainscha *Gainscha) A() *src.Api {
 	gainscha.initialize()
