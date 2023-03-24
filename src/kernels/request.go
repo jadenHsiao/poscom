@@ -1,13 +1,13 @@
 package kernels
 
 import (
+	"fmt"
+	"io"
 	"net/http"
 )
 
 type Request struct {
 	Method      string
-	Data        map[string]interface{}
-	Header      map[string]interface{}
 	validMethod []string
 }
 
@@ -33,16 +33,27 @@ func (req *Request) checkMethod() bool {
 	return false
 }
 
-func (req *Request) send(url string, data map[string]interface{}) {
+func (req *Request) Send(url string, data map[string]interface{}) {
 	req.initialize()
+	var resp *http.Response
+	var err error
 	if false == req.checkMethod() {
 
 	}
 	if "GET" == req.Method {
-
+		resp, err = http.Get(url)
 	} else if "POST" == req.Method {
-
+		resp, err = http.Post(url, "application/x-www-form-urlencoded", nil)
 	}
-
-	http.NewRequest(req.Method, url, nil)
+	if err != nil {
+		fmt.Println(err)
+		return
+	}
+	defer resp.Body.Close()
+	body, err := io.ReadAll(resp.Body)
+	if err != nil {
+		fmt.Println(err)
+		return
+	}
+	fmt.Println(string(body))
 }

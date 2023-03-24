@@ -52,6 +52,14 @@ func (gainscha *Gainscha) securityCode(args ...string) string {
 	return src.Md5(beforeStr)
 }
 
+func (gainscha *Gainscha) Group() {
+	gainscha.initialize()
+	request := new(Request)
+	request.Method = "GET"
+	request.Send(gainscha.Api.List["Group"], nil)
+
+}
+
 func (gainscha *Gainscha) A() *src.Api {
 	gainscha.initialize()
 	fmt.Println(gainscha.Api.List["Group"])

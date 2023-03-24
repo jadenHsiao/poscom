@@ -16,6 +16,8 @@ import (
 	"crypto/md5"
 	"fmt"
 	"io"
+	"reflect"
+	"strconv"
 	"time"
 )
 
@@ -38,4 +40,22 @@ func Md5(str string) string {
 //
 func Time() int64 {
 	return time.Now().UnixNano()
+}
+
+func ArgsType2String(args ...interface{}) (result []string) {
+	result = make([]string, len(args))
+	for key, val := range args {
+		dataType := reflect.TypeOf(val).Kind().String()
+		switch dataType {
+		case "string":
+		case "int":
+			val = strconv.Itoa(val.(int))
+		case "int64":
+			val = strconv.FormatInt(val.(int64), 10)
+		case "float64":
+			val = strconv.FormatFloat(val.(float64), 'E', -1, 64)
+		}
+		result[key] = val.(string)
+	}
+	return result
 }
