@@ -42,6 +42,12 @@ func Time() int64 {
 	return time.Now().UnixNano()
 }
 
+//
+// ArgsType2String
+//  @Description: 参数数据类型转化为字符串
+//  @param args
+//  @return result
+//
 func ArgsType2String(args ...interface{}) (result []string) {
 	result = make([]string, len(args))
 	for key, val := range args {

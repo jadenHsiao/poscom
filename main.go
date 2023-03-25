@@ -1,12 +1,16 @@
 package main
 
 import (
-	"github.com/jadenHsiao/poscom/src"
+	"fmt"
 	"github.com/jadenHsiao/poscom/src/kernels"
 )
 
 func main() {
-	a := new(kernels.Gainscha)
-	a.A()
-	src.ArgsType2String(1, 2, 3)
+
+	gainscha := kernels.Gainscha{
+		ApiSecretKey: "GFTF57YONDFPJU2G1DV004YZTMD9LJAO",
+		MemberCode:   "FC2A29F38B18C33C745504C3F6F668AD",
+	}
+	//gainscha.ListDevice()
+	fmt.Println(gainscha.Device("00135465930408666"))
 }

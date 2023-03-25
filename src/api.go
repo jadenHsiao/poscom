@@ -54,6 +54,7 @@ func (api *Api) Initialize() *Api {
 		"CancelPrint":   "cancelPrint",
 		"SetLogo":       "setLogo",
 		"DeleteLogo":    "deleteLogo",
+		"ListTemplate":  "listTemplate",
 	}
 	for key, val := range list {
 		list[key] = ApiHost + ":" + PORT + BasePath + "/" + val

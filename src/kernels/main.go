@@ -15,6 +15,8 @@ package kernels
 import (
 	"fmt"
 	"github.com/jadenHsiao/poscom/src"
+	"strconv"
+	"strings"
 )
 
 //
@@ -38,6 +40,29 @@ func (gainscha *Gainscha) initialize() {
 }
 
 //
+// generateParam
+//  @Description: 创建请求参数
+//  @receiver gainscha
+//  @param reqTime
+//  @param securityCode
+//  @param otherParams
+//  @return string
+//
+func (gainscha *Gainscha) generateParam(reqTime int64, securityCode string, otherParams map[string]string) string {
+	reqTimeString := strconv.FormatInt(reqTime, 10)
+	paramList := []string{
+		"reqTime=" + reqTimeString,
+		"securityCode=" + securityCode,
+		"memberCode=" + gainscha.MemberCode,
+	}
+	for key, val := range otherParams {
+		item := fmt.Sprintf("%v=%v", key, val)
+		paramList = append(paramList, item)
+	}
+	return strings.Join(paramList, "&")
+}
+
+//
 // securityCode
 //  @Description: 根据官方规则创建秘钥
 //  @receiver gainscha
@@ -52,16 +77,159 @@ func (gainscha *Gainscha) securityCode(args ...string) string {
 	return src.Md5(beforeStr)
 }
 
-func (gainscha *Gainscha) Group() {
+//
+// ListDevice
+//  @Description: 查询打印机列表
+// 	@See:https://dev.poscom.cn/openapi?listDevice
+//  @receiver gainscha
+//  @return result
+//  @return err
+//
+func (gainscha *Gainscha) ListDevice() (result map[string]interface{}, err *src.PoscomError) {
 	gainscha.initialize()
+	reqTime := src.Time()
+	securityCodeParams := src.ArgsType2String(
+		gainscha.MemberCode,
+		reqTime,
+		gainscha.ApiSecretKey,
+	)
+	securityCode := gainscha.securityCode(securityCodeParams...)
+	params := gainscha.generateParam(reqTime, securityCode, nil)
 	request := new(Request)
 	request.Method = "GET"
-	request.Send(gainscha.Api.List["Group"], nil)
-
+	url := gainscha.Api.List["ListDevice"]
+	return request.Send(fmt.Sprintf("%v?%v", url, params))
 }
 
-func (gainscha *Gainscha) A() *src.Api {
+//
+// Device
+//  @Description:查询打印机信息
+//	@See:https://dev.poscom.cn/openapi?device
+//  @receiver gainscha
+//  @param deviceID
+//  @return result
+//  @return err
+//
+func (gainscha *Gainscha) Device(deviceID string) (result map[string]interface{}, err *src.PoscomError) {
 	gainscha.initialize()
-	fmt.Println(gainscha.Api.List["Group"])
-	return gainscha.Api
+	reqTime := src.Time()
+	securityCodeParams := src.ArgsType2String(
+		gainscha.MemberCode,
+		reqTime,
+		gainscha.ApiSecretKey,
+		deviceID,
+	)
+	securityCode := gainscha.securityCode(securityCodeParams...)
+	otherParams := map[string]string{
+		"deviceID": deviceID,
+	}
+	params := gainscha.generateParam(reqTime, securityCode, otherParams)
+	request := new(Request)
+	request.Method = "GET"
+	url := gainscha.Api.List["Device"]
+	return request.Send(fmt.Sprintf("%v?%v", url, params))
+}
+
+//
+// GetStatus
+//  @Description:获取打印机状态
+//	@See:https://dev.poscom.cn/openapi?getStatus
+//  @receiver gainscha
+//  @param deviceID
+//  @return result
+//  @return err
+//
+func (gainscha *Gainscha) GetStatus(deviceID string) (result map[string]interface{}, err *src.PoscomError) {
+	gainscha.initialize()
+	reqTime := src.Time()
+	securityCodeParams := src.ArgsType2String(
+		gainscha.MemberCode,
+		reqTime,
+		gainscha.ApiSecretKey,
+	)
+	securityCode := gainscha.securityCode(securityCodeParams...)
+	otherParams := map[string]string{
+		"deviceID": deviceID,
+	}
+	params := gainscha.generateParam(reqTime, securityCode, otherParams)
+	request := new(Request)
+	request.Method = "POST"
+	url := gainscha.Api.List["GetStatus"]
+	return request.Send(fmt.Sprintf("%v?%v", url, params))
+}
+
+//
+// DelDev
+//  @Description:删除打印机
+//	@See:https://dev.poscom.cn/openapi?deldev
+//  @receiver gainscha
+//  @param deviceID
+//  @return result
+//  @return err
+//
+func (gainscha *Gainscha) DelDev(deviceID string) (result map[string]interface{}, err *src.PoscomError) {
+	gainscha.initialize()
+	reqTime := src.Time()
+	securityCodeParams := src.ArgsType2String(
+		gainscha.MemberCode,
+		reqTime,
+		gainscha.ApiSecretKey,
+		deviceID,
+	)
+	securityCode := gainscha.securityCode(securityCodeParams...)
+	otherParams := map[string]string{
+		"deviceID": deviceID,
+	}
+	params := gainscha.generateParam(reqTime, securityCode, otherParams)
+	request := new(Request)
+	request.Method = "POST"
+	url := gainscha.Api.List["DelDev"]
+	return request.Send(fmt.Sprintf("%v?%v", url, params))
+}
+
+//
+// Group
+//  @Description: 获取全部分组
+//  @receiver gainscha
+//  @return result
+//  @return err
+//
+func (gainscha *Gainscha) Group() (result map[string]interface{}, err *src.PoscomError) {
+	gainscha.initialize()
+	reqTime := src.Time()
+	securityCodeParams := src.ArgsType2String(
+		gainscha.MemberCode,
+		reqTime,
+		gainscha.ApiSecretKey,
+	)
+	securityCode := gainscha.securityCode(securityCodeParams...)
+	params := gainscha.generateParam(reqTime, securityCode, nil)
+	request := new(Request)
+	request.Method = "GET"
+	url := gainscha.Api.List["Group"]
+	return request.Send(fmt.Sprintf("%v?%v", url, params))
+}
+
+//
+// ListTemplate
+//  @Description:模板列表
+//	@See:https://dev.poscom.cn/openapi?templetList
+//  @receiver gainscha
+//  @return result
+//  @return err
+//
+func (gainscha *Gainscha) ListTemplate() (result map[string]interface{}, err *src.PoscomError) {
+	gainscha.initialize()
+	reqTime := src.Time()
+	securityCodeParams := src.ArgsType2String(
+		gainscha.MemberCode,
+		reqTime,
+		gainscha.ApiSecretKey,
+	)
+	securityCode := gainscha.securityCode(securityCodeParams...)
+	params := gainscha.generateParam(reqTime, securityCode, nil)
+	request := new(Request)
+	request.Method = "POST"
+	url := gainscha.Api.List["ListTemplate"]
+	return request.Send(fmt.Sprintf("%v?%v", url, params))
 }
