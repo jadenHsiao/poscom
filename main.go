@@ -12,5 +12,7 @@ func main() {
 		MemberCode:   "FC2A29F38B18C33C745504C3F6F668AD",
 	}
 	//gainscha.ListDevice()
-	fmt.Println(gainscha.Device("00135465930408666"))
+	//fmt.Println(gainscha.Device("00135465930408666"))
+	//fmt.Println(gainscha.Device("00135465930408666"))
+	fmt.Println(gainscha.AddGroup("分组1"))
 }

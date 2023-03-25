@@ -233,3 +233,30 @@ func (gainscha *Gainscha) ListTemplate() (result map[string]interface{}, err *sr
 	url := gainscha.Api.List["ListTemplate"]
 	return request.Send(fmt.Sprintf("%v?%v", url, params))
 }
+
+//
+// AddGroup
+//  @Description:添加（打印机）分组
+//  @receiver gainscha
+//  @param grpName
+//  @return result
+//  @return err
+//
+func (gainscha *Gainscha) AddGroup(grpName string) (result map[string]interface{}, err *src.PoscomError) {
+	gainscha.initialize()
+	reqTime := src.Time()
+	securityCodeParams := src.ArgsType2String(
+		gainscha.MemberCode,
+		reqTime,
+		gainscha.ApiSecretKey,
+	)
+	securityCode := gainscha.securityCode(securityCodeParams...)
+	otherParams := map[string]string{
+		"grpName": grpName,
+	}
+	params := gainscha.generateParam(reqTime, securityCode, otherParams)
+	request := new(Request)
+	request.Method = "POST"
+	url := gainscha.Api.List["AddGroup"]
+	return request.Send(fmt.Sprintf("%v?%v", url, params))
+}
