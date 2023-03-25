@@ -14,7 +14,6 @@ package kernels
 
 import (
 	"encoding/json"
-	"fmt"
 	"github.com/jadenHsiao/poscom/src"
 	"io"
 	"net/http"
@@ -66,7 +65,6 @@ func (req *Request) Send(url string) (result map[string]interface{}, errContent 
 	if err != nil {
 		return nil, src.NewError("101002", err.Error())
 	}
-	fmt.Println(string(body))
 	err = json.Unmarshal([]byte(string(body)), &result)
 	return result, nil
 }

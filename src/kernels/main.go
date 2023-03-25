@@ -15,6 +15,7 @@ package kernels
 import (
 	"fmt"
 	"github.com/jadenHsiao/poscom/src"
+	"net/url"
 	"strconv"
 	"strings"
 )
@@ -97,8 +98,8 @@ func (gainscha *Gainscha) ListDevice() (result map[string]interface{}, err *src.
 	params := gainscha.generateParam(reqTime, securityCode, nil)
 	request := new(Request)
 	request.Method = "GET"
-	url := gainscha.Api.List["ListDevice"]
-	return request.Send(fmt.Sprintf("%v?%v", url, params))
+	target := gainscha.Api.List["ListDevice"]
+	return request.Send(fmt.Sprintf("%v?%v", target, params))
 }
 
 //
@@ -126,8 +127,8 @@ func (gainscha *Gainscha) Device(deviceID string) (result map[string]interface{}
 	params := gainscha.generateParam(reqTime, securityCode, otherParams)
 	request := new(Request)
 	request.Method = "GET"
-	url := gainscha.Api.List["Device"]
-	return request.Send(fmt.Sprintf("%v?%v", url, params))
+	target := gainscha.Api.List["Device"]
+	return request.Send(fmt.Sprintf("%v?%v", target, params))
 }
 
 //
@@ -154,8 +155,8 @@ func (gainscha *Gainscha) GetStatus(deviceID string) (result map[string]interfac
 	params := gainscha.generateParam(reqTime, securityCode, otherParams)
 	request := new(Request)
 	request.Method = "POST"
-	url := gainscha.Api.List["GetStatus"]
-	return request.Send(fmt.Sprintf("%v?%v", url, params))
+	target := gainscha.Api.List["GetStatus"]
+	return request.Send(fmt.Sprintf("%v?%v", target, params))
 }
 
 //
@@ -183,8 +184,8 @@ func (gainscha *Gainscha) DelDev(deviceID string) (result map[string]interface{}
 	params := gainscha.generateParam(reqTime, securityCode, otherParams)
 	request := new(Request)
 	request.Method = "POST"
-	url := gainscha.Api.List["DelDev"]
-	return request.Send(fmt.Sprintf("%v?%v", url, params))
+	target := gainscha.Api.List["DelDev"]
+	return request.Send(fmt.Sprintf("%v?%v", target, params))
 }
 
 //
@@ -206,8 +207,8 @@ func (gainscha *Gainscha) Group() (result map[string]interface{}, err *src.Posco
 	params := gainscha.generateParam(reqTime, securityCode, nil)
 	request := new(Request)
 	request.Method = "GET"
-	url := gainscha.Api.List["Group"]
-	return request.Send(fmt.Sprintf("%v?%v", url, params))
+	target := gainscha.Api.List["Group"]
+	return request.Send(fmt.Sprintf("%v?%v", target, params))
 }
 
 //
@@ -230,8 +231,8 @@ func (gainscha *Gainscha) ListTemplate() (result map[string]interface{}, err *sr
 	params := gainscha.generateParam(reqTime, securityCode, nil)
 	request := new(Request)
 	request.Method = "POST"
-	url := gainscha.Api.List["ListTemplate"]
-	return request.Send(fmt.Sprintf("%v?%v", url, params))
+	target := gainscha.Api.List["ListTemplate"]
+	return request.Send(fmt.Sprintf("%v?%v", target, params))
 }
 
 //
@@ -252,11 +253,11 @@ func (gainscha *Gainscha) AddGroup(grpName string) (result map[string]interface{
 	)
 	securityCode := gainscha.securityCode(securityCodeParams...)
 	otherParams := map[string]string{
-		"grpName": grpName,
+		"grpName": url.QueryEscape(grpName),
 	}
 	params := gainscha.generateParam(reqTime, securityCode, otherParams)
 	request := new(Request)
 	request.Method = "POST"
-	url := gainscha.Api.List["AddGroup"]
-	return request.Send(fmt.Sprintf("%v?%v", url, params))
+	target := gainscha.Api.List["AddGroup"]
+	return request.Send(fmt.Sprintf("%v?%v", target, params))
 }

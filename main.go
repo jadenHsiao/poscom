@@ -14,5 +14,5 @@ func main() {
 	//gainscha.ListDevice()
 	//fmt.Println(gainscha.Device("00135465930408666"))
 	//fmt.Println(gainscha.Device("00135465930408666"))
-	fmt.Println(gainscha.AddGroup("分组1"))
+	fmt.Println(gainscha.AddGroup("分组2"))
 }
