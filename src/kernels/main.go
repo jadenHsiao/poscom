@@ -408,3 +408,61 @@ func (gainscha *Gainscha) DeleteLogo(deviceID string) (result map[string]interfa
 	target := gainscha.Api.List["DeleteLogo"]
 	return request.Send(fmt.Sprintf("%v?%v", target, params))
 }
+
+//
+// SetPushUrl
+//  @Description:设置接受服务器信息推送地址
+//  @receiver gainscha
+//  @param pushUrl
+//  @return result
+//  @return err
+//
+func (gainscha *Gainscha) SetPushUrl(pushUrl string) (result map[string]interface{}, err *src.PoscomError) {
+	gainscha.initialize()
+	reqTime := src.Time()
+	securityCodeParams := src.ArgsType2String(
+		gainscha.MemberCode,
+		reqTime,
+		gainscha.ApiSecretKey,
+		pushUrl,
+	)
+	securityCode := gainscha.securityCode(securityCodeParams...)
+	otherParams := map[string]string{
+		"pushUrl": pushUrl,
+	}
+	params := gainscha.generateParam(reqTime, securityCode, otherParams)
+	request := new(Request)
+	request.Method = "POST"
+	target := gainscha.Api.List["SetPushUrl"]
+	return request.Send(fmt.Sprintf("%v?%v", target, params))
+}
+
+//
+// SetLogo
+//  @Description:设置 logo
+//  @receiver gainscha
+//  @param deviceID
+//  @param imgUrl
+//  @return result
+//  @return err
+//
+func (gainscha *Gainscha) SetLogo(deviceID string, imgUrl string) (result map[string]interface{}, err *src.PoscomError) {
+	gainscha.initialize()
+	reqTime := src.Time()
+	securityCodeParams := src.ArgsType2String(
+		gainscha.MemberCode,
+		reqTime,
+		gainscha.ApiSecretKey,
+		deviceID,
+	)
+	securityCode := gainscha.securityCode(securityCodeParams...)
+	otherParams := map[string]string{
+		"deviceID": deviceID,
+		"imgUrl":   imgUrl,
+	}
+	params := gainscha.generateParam(reqTime, securityCode, otherParams)
+	request := new(Request)
+	request.Method = "POST"
+	target := gainscha.Api.List["SetLogo"]
+	return request.Send(fmt.Sprintf("%v?%v", target, params))
+}

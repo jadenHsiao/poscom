@@ -55,6 +55,7 @@ func (api *Api) Initialize() *Api {
 		"SetLogo":       "setLogo",
 		"DeleteLogo":    "deleteLogo",
 		"ListTemplate":  "listTemplate",
+		"SetPushUrl":    "setPushUrl",
 	}
 	for key, val := range list {
 		list[key] = ApiHost + ":" + PORT + BasePath + "/" + val

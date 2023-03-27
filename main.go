@@ -22,5 +22,7 @@ func main() {
 	//fmt.Println(gainscha.EditGroup("46003", "分组3"))
 	//fmt.Println(gainscha.DelGroup("46003"))
 	//fmt.Println(gainscha.QueryState("1000001225881146"))
-	fmt.Println(gainscha.DeleteLogo("00135465930408666"))
+	//fmt.Println(gainscha.DeleteLogo("00135465930408666"))
+	//fmt.Println(gainscha.SetPushUrl("00135465930408666"))
+	fmt.Println(gainscha.SetLogo("00135465930408666", "1111"))
 }

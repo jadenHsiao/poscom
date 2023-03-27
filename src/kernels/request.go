@@ -24,20 +24,7 @@ import (
 //  @Description:请求结构体
 //
 type Request struct {
-	Method      string
-	validMethod []string
-}
-
-//
-// initialize
-//  @Description: 初始化
-//  @receiver req
-//
-func (req *Request) initialize() {
-	req.validMethod = []string{
-		0: "GET",
-		1: "POST",
-	}
+	Method string
 }
 
 //
@@ -49,7 +36,6 @@ func (req *Request) initialize() {
 //  @return errContent
 //
 func (req *Request) Send(url string) (result map[string]interface{}, errContent *src.PoscomError) {
-	req.initialize()
 	var resp *http.Response
 	var err error
 	if "GET" == req.Method {
