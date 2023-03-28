@@ -13,29 +13,27 @@ See the Mulan PSL v2 for more details.
 package kernels
 
 import (
-	"encoding/json"
-	"github.com/jadenHsiao/poscom/src"
 	"io"
 	"net/http"
+
+	"github.com/jadenHsiao/poscom/src"
 )
 
-//
-//  Request
-//  @Description:请求结构体
-//
+// Request
+// @Description:请求结构体
 type Request struct {
-	Method string
+	Method   string
+	Response []byte
 }
 
-//
 // Send
-//  @Description: 发送请求
-//  @receiver req
-//  @param url
-//  @return result
-//  @return errContent
 //
-func (req *Request) Send(url string) (result map[string]interface{}, errContent *src.PoscomError) {
+//	@Description: 发送请求
+//	@receiver req
+//	@param url
+//	@return result
+//	@return errContent
+func (req *Request) Send(url string) (result *src.PoscomError) {
 	var resp *http.Response
 	var err error
 	if "GET" == req.Method {
@@ -44,13 +42,14 @@ func (req *Request) Send(url string) (result map[string]interface{}, errContent 
 		resp, err = http.Post(url, "application/x-www-form-urlencoded", nil)
 	}
 	if err != nil {
-		return nil, src.NewError("101001", "")
+		return src.NewError("101001", "")
 	}
 	defer resp.Body.Close()
 	body, err := io.ReadAll(resp.Body)
 	if err != nil {
-		return nil, src.NewError("101002", err.Error())
+		return src.NewError("101002", err.Error())
 	}
-	err = json.Unmarshal([]byte(string(body)), &result)
-	return result, nil
+	req.Response = body
+	return nil
+
 }

@@ -21,20 +21,17 @@ const (
 	BasePath = "/apisc"
 )
 
-//
-//  Api
-//  @Description: `Api`结构体
-//
+// Api
+// @Description: `Api`结构体
 type Api struct {
 	List map[string]string
 }
 
-//
 // Initialize
-//  @Description: 初始化`Api`结构体
-//  @receiver api
-//  @return *Api
 //
+//	@Description: 初始化`Api`结构体
+//	@receiver api
+//	@return *Api
 func (api *Api) Initialize() *Api {
 	var list map[string]string
 	list = map[string]string{

@@ -2,15 +2,18 @@ package main
 
 import (
 	"fmt"
+
 	"github.com/jadenHsiao/poscom/src/kernels"
 )
 
 func main() {
 
-	gainscha := kernels.Gainscha{
+	gainscha := &kernels.Gainscha{
 		ApiSecretKey: "GFTF57YONDFPJU2G1DV004YZTMD9LJAO",
 		MemberCode:   "FC2A29F38B18C33C745504C3F6F668AD",
 	}
+	fmt.Println(gainscha.ListDevice().ToMap())
+
 	//fmt.Println(gainscha.ListDevice())
 	//fmt.Println(gainscha.Device("00135465930408666"))
 	//fmt.Println(gainscha.DelDev("00135465930408666"))
@@ -24,5 +27,5 @@ func main() {
 	//fmt.Println(gainscha.QueryState("1000001225881146"))
 	//fmt.Println(gainscha.DeleteLogo("00135465930408666"))
 	//fmt.Println(gainscha.SetPushUrl("00135465930408666"))
-	fmt.Println(gainscha.SetLogo("00135465930408666", "1111"))
+	//fmt.Println(gainscha.SetLogo("00135465930408666", "1111"))
 }

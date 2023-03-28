@@ -13,42 +13,43 @@ See the Mulan PSL v2 for more details.
 package kernels
 
 import (
+	"encoding/json"
 	"fmt"
-	"github.com/jadenHsiao/poscom/src"
 	"net/url"
 	"strconv"
 	"strings"
+
+	"github.com/jadenHsiao/poscom/src"
 )
 
-//
-//  Gainscha
-//  @Description: 佳博打印结构体
-//
+// Gainscha
+// @Description: 佳博打印结构体
 type Gainscha struct {
 	Api          *src.Api
 	ApiSecretKey string
 	MemberCode   string
+	request      *Request
+	err          *src.PoscomError
 }
 
-//
 // initialize
-//  @Description: 初始化佳博打印结构体
-//  @receiver gainscha
 //
+//	@Description: 初始化佳博打印结构体
+//	@receiver gainscha
 func (gainscha *Gainscha) initialize() {
 	gainscha.Api = new(src.Api)
 	gainscha.Api.Initialize()
+	gainscha.request = new(Request)
 }
 
-//
 // generateParam
-//  @Description: 创建请求参数
-//  @receiver gainscha
-//  @param reqTime
-//  @param securityCode
-//  @param otherParams
-//  @return string
 //
+//	@Description: 创建请求参数
+//	@receiver gainscha
+//	@param reqTime
+//	@param securityCode
+//	@param otherParams
+//	@return string
 func (gainscha *Gainscha) generateParam(reqTime int64, securityCode string, otherParams map[string]string) string {
 	reqTimeString := strconv.FormatInt(reqTime, 10)
 	paramList := []string{
@@ -63,13 +64,12 @@ func (gainscha *Gainscha) generateParam(reqTime int64, securityCode string, othe
 	return strings.Join(paramList, "&")
 }
 
-//
 // securityCode
-//  @Description: 根据官方规则创建秘钥
-//  @receiver gainscha
-//  @param args
-//  @return string
 //
+//	@Description: 根据官方规则创建秘钥
+//	@receiver gainscha
+//	@param args
+//	@return string
 func (gainscha *Gainscha) securityCode(args ...string) string {
 	var beforeStr string
 	for _, val := range args {
@@ -79,14 +79,62 @@ func (gainscha *Gainscha) securityCode(args ...string) string {
 }
 
 //
-// ListDevice
-//  @Description: 查询打印机列表
-// 	@See:https://dev.poscom.cn/openapi?listDevice
+// ToMap
+//  @Description: 返回结构体
 //  @receiver gainscha
 //  @return result
 //  @return err
 //
-func (gainscha *Gainscha) ListDevice() (result map[string]interface{}, err *src.PoscomError) {
+func (gainscha *Gainscha) ToMap() (result map[string]interface{}, err *src.PoscomError) {
+	if nil != gainscha.err {
+		return nil, gainscha.err
+	}
+	body := gainscha.request.Response
+	errContent := json.Unmarshal(body, &result)
+	if nil != errContent {
+		gainscha.err = src.NewError("101002", errContent.Error())
+		return nil, gainscha.err
+	}
+	return result, nil
+}
+
+//
+// ToString
+//  @Description: 返回字符串
+//  @receiver gainscha
+//  @return result
+//  @return err
+//
+func (gainscha *Gainscha) ToString() (result string, err *src.PoscomError) {
+	if nil != gainscha.err {
+		return "", gainscha.err
+	}
+	body := gainscha.request.Response
+	return string(body), nil
+}
+
+//
+// ToByte
+//  @Description: 返回`byte`
+//  @receiver gainscha
+//  @return result
+//  @return err
+//
+func (gainscha *Gainscha) ToByte() (result []byte, err *src.PoscomError) {
+	if nil != gainscha.err {
+		return nil, gainscha.err
+	}
+	return gainscha.request.Response, nil
+}
+
+//
+// ListDevice
+// @Description: 查询打印机列表
+// @See:https://dev.poscom.cn/openapi?listDevice
+// @receiver gainscha
+// @return *Gainscha
+//
+func (gainscha *Gainscha) ListDevice() *Gainscha {
 	gainscha.initialize()
 	reqTime := src.Time()
 	securityCodeParams := src.ArgsType2String(
@@ -96,22 +144,25 @@ func (gainscha *Gainscha) ListDevice() (result map[string]interface{}, err *src.
 	)
 	securityCode := gainscha.securityCode(securityCodeParams...)
 	params := gainscha.generateParam(reqTime, securityCode, nil)
-	request := new(Request)
+	request := gainscha.request
 	request.Method = "GET"
 	target := gainscha.Api.List["ListDevice"]
-	return request.Send(fmt.Sprintf("%v?%v", target, params))
+	resp := request.Send(fmt.Sprintf("%v?%v", target, params))
+	if nil != resp {
+		gainscha.err = resp
+	}
+	return gainscha
 }
 
 //
 // Device
-//  @Description:查询打印机信息
+//	@Description:查询打印机信息
 //	@See:https://dev.poscom.cn/openapi?device
 //  @receiver gainscha
 //  @param deviceID
-//  @return result
-//  @return err
+//  @return *Gainscha
 //
-func (gainscha *Gainscha) Device(deviceID string) (result map[string]interface{}, err *src.PoscomError) {
+func (gainscha *Gainscha) Device(deviceID string) *Gainscha {
 	gainscha.initialize()
 	reqTime := src.Time()
 	securityCodeParams := src.ArgsType2String(
@@ -125,22 +176,25 @@ func (gainscha *Gainscha) Device(deviceID string) (result map[string]interface{}
 		"deviceID": deviceID,
 	}
 	params := gainscha.generateParam(reqTime, securityCode, otherParams)
-	request := new(Request)
+	request := gainscha.request
 	request.Method = "GET"
 	target := gainscha.Api.List["Device"]
-	return request.Send(fmt.Sprintf("%v?%v", target, params))
+	resp := request.Send(fmt.Sprintf("%v?%v", target, params))
+	if nil != resp {
+		gainscha.err = resp
+	}
+	return gainscha
 }
 
 //
 // GetStatus
-//  @Description:获取打印机状态
+//	@Description:获取打印机状态
 //	@See:https://dev.poscom.cn/openapi?getStatus
 //  @receiver gainscha
 //  @param deviceID
-//  @return result
-//  @return err
+//  @return *Gainscha
 //
-func (gainscha *Gainscha) GetStatus(deviceID string) (result map[string]interface{}, err *src.PoscomError) {
+func (gainscha *Gainscha) GetStatus(deviceID string) *Gainscha {
 	gainscha.initialize()
 	reqTime := src.Time()
 	securityCodeParams := src.ArgsType2String(
@@ -153,22 +207,25 @@ func (gainscha *Gainscha) GetStatus(deviceID string) (result map[string]interfac
 		"deviceID": deviceID,
 	}
 	params := gainscha.generateParam(reqTime, securityCode, otherParams)
-	request := new(Request)
+	request := gainscha.request
 	request.Method = "POST"
 	target := gainscha.Api.List["GetStatus"]
-	return request.Send(fmt.Sprintf("%v?%v", target, params))
+	resp := request.Send(fmt.Sprintf("%v?%v", target, params))
+	if nil != resp {
+		gainscha.err = resp
+	}
+	return gainscha
 }
 
 //
 // DelDev
-//  @Description:删除打印机
+//	@Description:删除打印机
 //	@See:https://dev.poscom.cn/openapi?deldev
 //  @receiver gainscha
 //  @param deviceID
-//  @return result
-//  @return err
+//  @return *Gainscha
 //
-func (gainscha *Gainscha) DelDev(deviceID string) (result map[string]interface{}, err *src.PoscomError) {
+func (gainscha *Gainscha) DelDev(deviceID string) *Gainscha {
 	gainscha.initialize()
 	reqTime := src.Time()
 	securityCodeParams := src.ArgsType2String(
@@ -182,20 +239,23 @@ func (gainscha *Gainscha) DelDev(deviceID string) (result map[string]interface{}
 		"deviceID": deviceID,
 	}
 	params := gainscha.generateParam(reqTime, securityCode, otherParams)
-	request := new(Request)
+	request := gainscha.request
 	request.Method = "POST"
 	target := gainscha.Api.List["DelDev"]
-	return request.Send(fmt.Sprintf("%v?%v", target, params))
+	resp := request.Send(fmt.Sprintf("%v?%v", target, params))
+	if nil != resp {
+		gainscha.err = resp
+	}
+	return gainscha
 }
 
 //
 // Group
 //  @Description: 获取全部分组
 //  @receiver gainscha
-//  @return result
-//  @return err
+//  @return *Gainscha
 //
-func (gainscha *Gainscha) Group() (result map[string]interface{}, err *src.PoscomError) {
+func (gainscha *Gainscha) Group() *Gainscha {
 	gainscha.initialize()
 	reqTime := src.Time()
 	securityCodeParams := src.ArgsType2String(
@@ -205,21 +265,24 @@ func (gainscha *Gainscha) Group() (result map[string]interface{}, err *src.Posco
 	)
 	securityCode := gainscha.securityCode(securityCodeParams...)
 	params := gainscha.generateParam(reqTime, securityCode, nil)
-	request := new(Request)
+	request := gainscha.request
 	request.Method = "GET"
 	target := gainscha.Api.List["Group"]
-	return request.Send(fmt.Sprintf("%v?%v", target, params))
+	resp := request.Send(fmt.Sprintf("%v?%v", target, params))
+	if nil != resp {
+		gainscha.err = resp
+	}
+	return gainscha
 }
 
 //
 // ListTemplate
-//  @Description:模板列表
+//	@Description:模板列表
 //	@See:https://dev.poscom.cn/openapi?templetList
 //  @receiver gainscha
-//  @return result
-//  @return err
+//  @return *Gainscha
 //
-func (gainscha *Gainscha) ListTemplate() (result map[string]interface{}, err *src.PoscomError) {
+func (gainscha *Gainscha) ListTemplate() *Gainscha {
 	gainscha.initialize()
 	reqTime := src.Time()
 	securityCodeParams := src.ArgsType2String(
@@ -229,21 +292,24 @@ func (gainscha *Gainscha) ListTemplate() (result map[string]interface{}, err *sr
 	)
 	securityCode := gainscha.securityCode(securityCodeParams...)
 	params := gainscha.generateParam(reqTime, securityCode, nil)
-	request := new(Request)
+	request := gainscha.request
 	request.Method = "POST"
 	target := gainscha.Api.List["ListTemplate"]
-	return request.Send(fmt.Sprintf("%v?%v", target, params))
+	resp := request.Send(fmt.Sprintf("%v?%v", target, params))
+	if nil != resp {
+		gainscha.err = resp
+	}
+	return gainscha
 }
 
 //
 // AddGroup
-//  @Description:添加（打印机）分组
+//  @Description: 添加（打印机）分组
 //  @receiver gainscha
 //  @param grpName
-//  @return result
-//  @return err
+//  @return *Gainscha
 //
-func (gainscha *Gainscha) AddGroup(grpName string) (result map[string]interface{}, err *src.PoscomError) {
+func (gainscha *Gainscha) AddGroup(grpName string) *Gainscha {
 	gainscha.initialize()
 	reqTime := src.Time()
 	securityCodeParams := src.ArgsType2String(
@@ -256,10 +322,14 @@ func (gainscha *Gainscha) AddGroup(grpName string) (result map[string]interface{
 		"grpName": url.QueryEscape(grpName),
 	}
 	params := gainscha.generateParam(reqTime, securityCode, otherParams)
-	request := new(Request)
+	request := gainscha.request
 	request.Method = "POST"
 	target := gainscha.Api.List["AddGroup"]
-	return request.Send(fmt.Sprintf("%v?%v", target, params))
+	resp := request.Send(fmt.Sprintf("%v?%v", target, params))
+	if nil != resp {
+		gainscha.err = resp
+	}
+	return gainscha
 }
 
 //
@@ -269,10 +339,9 @@ func (gainscha *Gainscha) AddGroup(grpName string) (result map[string]interface{
 //  @param deviceNo
 //  @param start
 //  @param end
-//  @return result
-//  @return err
+//  @return *Gainscha
 //
-func (gainscha *Gainscha) ListException(deviceNo string, start string, end string) (result map[string]interface{}, err *src.PoscomError) {
+func (gainscha *Gainscha) ListException(deviceNo string, start string, end string) *Gainscha {
 	gainscha.initialize()
 	reqTime := src.Time()
 	securityCodeParams := src.ArgsType2String(
@@ -287,22 +356,25 @@ func (gainscha *Gainscha) ListException(deviceNo string, start string, end strin
 		"end":   end,
 	}
 	params := gainscha.generateParam(reqTime, securityCode, otherParams)
-	request := new(Request)
+	request := gainscha.request
 	request.Method = "GET"
 	target := gainscha.Api.List["ListException"]
-	return request.Send(fmt.Sprintf("%v?%v", target, params))
+	resp := request.Send(fmt.Sprintf("%v?%v", target, params))
+	if nil != resp {
+		gainscha.err = resp
+	}
+	return gainscha
 }
 
 //
 // EditGroup
-//  @Description:修改（打印机）分组名称
+//  @Description: 修改（打印机）分组名称
 //  @receiver gainscha
 //  @param grpId
 //  @param grpName
-//  @return result
-//  @return err
+//  @return *Gainscha
 //
-func (gainscha *Gainscha) EditGroup(grpId string, grpName string) (result map[string]interface{}, err *src.PoscomError) {
+func (gainscha *Gainscha) EditGroup(grpId string, grpName string) *Gainscha {
 	gainscha.initialize()
 	reqTime := src.Time()
 	securityCodeParams := src.ArgsType2String(
@@ -317,21 +389,24 @@ func (gainscha *Gainscha) EditGroup(grpId string, grpName string) (result map[st
 		"grpName": url.QueryEscape(grpName),
 	}
 	params := gainscha.generateParam(reqTime, securityCode, otherParams)
-	request := new(Request)
+	request := gainscha.request
 	request.Method = "POST"
 	target := gainscha.Api.List["EditGroup"]
-	return request.Send(fmt.Sprintf("%v?%v", target, params))
+	resp := request.Send(fmt.Sprintf("%v?%v", target, params))
+	if nil != resp {
+		gainscha.err = resp
+	}
+	return gainscha
 }
 
 //
 // DelGroup
-//  @Description:删除（打印机）分组名称
+//  @Description: 删除（打印机）分组名称
 //  @receiver gainscha
 //  @param grpId
-//  @return result
-//  @return err
+//  @return *Gainscha
 //
-func (gainscha *Gainscha) DelGroup(grpId string) (result map[string]interface{}, err *src.PoscomError) {
+func (gainscha *Gainscha) DelGroup(grpId string) *Gainscha {
 	gainscha.initialize()
 	reqTime := src.Time()
 	securityCodeParams := src.ArgsType2String(
@@ -345,22 +420,25 @@ func (gainscha *Gainscha) DelGroup(grpId string) (result map[string]interface{},
 		"grpID": grpId,
 	}
 	params := gainscha.generateParam(reqTime, securityCode, otherParams)
-	request := new(Request)
+	request := gainscha.request
 	request.Method = "POST"
 	target := gainscha.Api.List["DelGroup"]
-	return request.Send(fmt.Sprintf("%v?%v", target, params))
+	resp := request.Send(fmt.Sprintf("%v?%v", target, params))
+	if nil != resp {
+		gainscha.err = resp
+	}
+	return gainscha
 }
 
 //
 // QueryState
-//  @Description:查询打印任务状态
+//	@Description:查询打印任务状态
 //	@See:https://dev.poscom.cn/openapi?queryState
 //  @receiver gainscha
 //  @param msgNo
-//  @return result
-//  @return err
+//  @return *Gainscha
 //
-func (gainscha *Gainscha) QueryState(msgNo string) (result map[string]interface{}, err *src.PoscomError) {
+func (gainscha *Gainscha) QueryState(msgNo string) *Gainscha {
 	gainscha.initialize()
 	reqTime := src.Time()
 	securityCodeParams := src.ArgsType2String(
@@ -374,22 +452,25 @@ func (gainscha *Gainscha) QueryState(msgNo string) (result map[string]interface{
 		"msgNo": msgNo,
 	}
 	params := gainscha.generateParam(reqTime, securityCode, otherParams)
-	request := new(Request)
+	request := gainscha.request
 	request.Method = "GET"
 	target := gainscha.Api.List["QueryState"]
-	return request.Send(fmt.Sprintf("%v?%v", target, params))
+	resp := request.Send(fmt.Sprintf("%v?%v", target, params))
+	if nil != resp {
+		gainscha.err = resp
+	}
+	return gainscha
 }
 
 //
 // DeleteLogo
-//  @Description:删除NVLogo（票据机）
-// 	@See:https://dev.poscom.cn/openapi?deleteLogo
+//	@Description:删除NVLogo（票据机）
+//	@See:https://dev.poscom.cn/openapi?deleteLogo
 //  @receiver gainscha
 //  @param deviceID
-//  @return result
-//  @return err
+//  @return *Gainscha
 //
-func (gainscha *Gainscha) DeleteLogo(deviceID string) (result map[string]interface{}, err *src.PoscomError) {
+func (gainscha *Gainscha) DeleteLogo(deviceID string) *Gainscha {
 	gainscha.initialize()
 	reqTime := src.Time()
 	securityCodeParams := src.ArgsType2String(
@@ -403,21 +484,24 @@ func (gainscha *Gainscha) DeleteLogo(deviceID string) (result map[string]interfa
 		"deviceID": deviceID,
 	}
 	params := gainscha.generateParam(reqTime, securityCode, otherParams)
-	request := new(Request)
+	request := gainscha.request
 	request.Method = "POST"
 	target := gainscha.Api.List["DeleteLogo"]
-	return request.Send(fmt.Sprintf("%v?%v", target, params))
+	resp := request.Send(fmt.Sprintf("%v?%v", target, params))
+	if nil != resp {
+		gainscha.err = resp
+	}
+	return gainscha
 }
 
 //
 // SetPushUrl
-//  @Description:设置接受服务器信息推送地址
+//  @Description: 设置接受服务器信息推送地址
 //  @receiver gainscha
 //  @param pushUrl
-//  @return result
-//  @return err
+//  @return *Gainscha
 //
-func (gainscha *Gainscha) SetPushUrl(pushUrl string) (result map[string]interface{}, err *src.PoscomError) {
+func (gainscha *Gainscha) SetPushUrl(pushUrl string) *Gainscha {
 	gainscha.initialize()
 	reqTime := src.Time()
 	securityCodeParams := src.ArgsType2String(
@@ -431,22 +515,25 @@ func (gainscha *Gainscha) SetPushUrl(pushUrl string) (result map[string]interfac
 		"pushUrl": pushUrl,
 	}
 	params := gainscha.generateParam(reqTime, securityCode, otherParams)
-	request := new(Request)
+	request := gainscha.request
 	request.Method = "POST"
 	target := gainscha.Api.List["SetPushUrl"]
-	return request.Send(fmt.Sprintf("%v?%v", target, params))
+	resp := request.Send(fmt.Sprintf("%v?%v", target, params))
+	if nil != resp {
+		gainscha.err = resp
+	}
+	return gainscha
 }
 
 //
 // SetLogo
-//  @Description:设置 logo
+//  @Description: 设置 logo
 //  @receiver gainscha
 //  @param deviceID
 //  @param imgUrl
-//  @return result
-//  @return err
+//  @return *Gainscha
 //
-func (gainscha *Gainscha) SetLogo(deviceID string, imgUrl string) (result map[string]interface{}, err *src.PoscomError) {
+func (gainscha *Gainscha) SetLogo(deviceID string, imgUrl string) *Gainscha {
 	gainscha.initialize()
 	reqTime := src.Time()
 	securityCodeParams := src.ArgsType2String(
@@ -461,8 +548,14 @@ func (gainscha *Gainscha) SetLogo(deviceID string, imgUrl string) (result map[st
 		"imgUrl":   imgUrl,
 	}
 	params := gainscha.generateParam(reqTime, securityCode, otherParams)
-	request := new(Request)
+	request := gainscha.request
 	request.Method = "POST"
 	target := gainscha.Api.List["SetLogo"]
-	return request.Send(fmt.Sprintf("%v?%v", target, params))
+	resp := request.Send(fmt.Sprintf("%v?%v", target, params))
+	if nil != resp {
+		gainscha.err = resp
+	}
+	return gainscha
 }
+
+//func (gainscha *Gainscha) CancelPrint(deviceID string)
