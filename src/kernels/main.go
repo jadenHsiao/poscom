@@ -558,4 +558,34 @@ func (gainscha *Gainscha) SetLogo(deviceID string, imgUrl string) *Gainscha {
 	return gainscha
 }
 
-//func (gainscha *Gainscha) CancelPrint(deviceID string)
+//
+// CancelPrint
+//  @Description: 取消打印订单
+//  @receiver gainscha
+//  @param deviceID
+//  @return *Gainscha
+//
+func (gainscha *Gainscha) CancelPrint(deviceID string) *Gainscha {
+	gainscha.initialize()
+	reqTime := src.Time()
+	securityCodeParams := src.ArgsType2String(
+		gainscha.MemberCode,
+		reqTime,
+		gainscha.ApiSecretKey,
+		deviceID,
+	)
+	securityCode := gainscha.securityCode(securityCodeParams...)
+	otherParams := map[string]string{
+		"deviceID": deviceID,
+		"all":      "1",
+	}
+	params := gainscha.generateParam(reqTime, securityCode, otherParams)
+	request := gainscha.request
+	request.Method = "POST"
+	target := gainscha.Api.List["CancelPrint"]
+	resp := request.Send(fmt.Sprintf("%v?%v", target, params))
+	if nil != resp {
+		gainscha.err = resp
+	}
+	return gainscha
+}
