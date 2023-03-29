@@ -589,3 +589,105 @@ func (gainscha *Gainscha) CancelPrint(deviceID string) *Gainscha {
 	}
 	return gainscha
 }
+
+//
+// SendVolume
+//  @Description:打印机设置音量
+//	@See:https://dev.poscom.cn/debug?sendvolume
+//  @receiver gainscha
+//  @param deviceID
+//  @param volume
+//  @return *Gainscha
+//
+func (gainscha *Gainscha) SendVolume(deviceID string, volume int) *Gainscha {
+	gainscha.initialize()
+	reqTime := src.Time()
+	securityCodeParams := src.ArgsType2String(
+		gainscha.MemberCode,
+		reqTime,
+		gainscha.ApiSecretKey,
+		deviceID,
+	)
+	securityCode := gainscha.securityCode(securityCodeParams...)
+	otherParams := map[string]string{
+		"deviceID": deviceID,
+		"volume":   strconv.Itoa(volume),
+	}
+	params := gainscha.generateParam(reqTime, securityCode, otherParams)
+	request := gainscha.request
+	request.Method = "POST"
+	target := gainscha.Api.List["SendVolume"]
+	resp := request.Send(fmt.Sprintf("%v?%v", target, params))
+	if nil != resp {
+		gainscha.err = resp
+	}
+	return gainscha
+}
+
+//
+// SetVoiceType
+//  @Description:语音播放方式设置
+//	@See:https://dev.poscom.cn/debug?setvoicetype
+//  @receiver gainscha
+//  @param deviceID
+//  @param voiceType
+//  @return *Gainscha
+//
+func (gainscha *Gainscha) SetVoiceType(deviceID string, voiceType int) *Gainscha {
+	gainscha.initialize()
+	reqTime := src.Time()
+	securityCodeParams := src.ArgsType2String(
+		gainscha.MemberCode,
+		reqTime,
+		gainscha.ApiSecretKey,
+		deviceID,
+	)
+	securityCode := gainscha.securityCode(securityCodeParams...)
+	otherParams := map[string]string{
+		"deviceID":  deviceID,
+		"voiceType": strconv.Itoa(voiceType),
+	}
+	params := gainscha.generateParam(reqTime, securityCode, otherParams)
+	request := gainscha.request
+	request.Method = "POST"
+	target := gainscha.Api.List["SetVoiceType"]
+	resp := request.Send(fmt.Sprintf("%v?%v", target, params))
+	if nil != resp {
+		gainscha.err = resp
+	}
+	return gainscha
+}
+
+//
+// SetNet
+//  @Description:网络链接方式设置
+//	@See:https://dev.poscom.cn/debug?setnet
+//  @receiver gainscha
+//  @param deviceID
+//  @param netType
+//  @return *Gainscha
+//
+func (gainscha *Gainscha) SetNet(deviceID string, netType string) *Gainscha {
+	gainscha.initialize()
+	reqTime := src.Time()
+	securityCodeParams := src.ArgsType2String(
+		gainscha.MemberCode,
+		reqTime,
+		gainscha.ApiSecretKey,
+		deviceID,
+	)
+	securityCode := gainscha.securityCode(securityCodeParams...)
+	otherParams := map[string]string{
+		"deviceID": deviceID,
+		"netType":  netType,
+	}
+	params := gainscha.generateParam(reqTime, securityCode, otherParams)
+	request := gainscha.request
+	request.Method = "POST"
+	target := gainscha.Api.List["SetNet"]
+	resp := request.Send(fmt.Sprintf("%v?%v", target, params))
+	if nil != resp {
+		gainscha.err = resp
+	}
+	return gainscha
+}
