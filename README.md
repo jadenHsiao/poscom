@@ -1,12 +1,14 @@
 # Poscom SDK for Golang
-***
+
 ![version](https://img.shields.io/badge/version-v1-green)
+![license](https://img.shields.io/badge/license-MulanPSL--2.0-blue)
+[![Open Source Love](https://badges.frapsoft.com/os/v1/open-source.svg?v=103)](https://github.com/ellerbrock/open-source-badges/)
 
 这是一个使用Golang开发的佳博打印机SDK。
 > 本SDK是基于佳博云打印Web API文档（v1.9.7）和[在线文档](https://dev.poscom.cn/docs)所开发
 
 ## 快速开始
-***
+
 1. 安装
 
 ````go
@@ -24,7 +26,7 @@ gainscha.ListDevice().ToString()
 ````
 
 ## 接口一览
-***
+
 
 1. 函数和接口对应参照
 
@@ -61,7 +63,7 @@ gainscha.ListDevice().ToString()
 | ToByte|返回为Byte|
 
 ## 目录文件说明
-***
+
 ````go
 |-- poscom  
     |-- src                 // SDK 目录
@@ -74,11 +76,9 @@ gainscha.ListDevice().ToString()
 ````
 
 ## 贡献
-***
 * 在API列表中查看哪些API未实现
 * 提交issue，描述需要贡献的内容
 * 完成更改后，提交PR
 
 ## License
-***
 木兰宽松许可证， 第2版
