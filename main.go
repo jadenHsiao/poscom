@@ -1,4 +1,4 @@
-package main
+package poscom
 
 import (
 	poscom "github.com/jadenHsiao/poscom/src/kernels"
