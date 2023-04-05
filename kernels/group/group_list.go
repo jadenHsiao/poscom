@@ -18,12 +18,11 @@ import (
 	"github.com/jadenHsiao/poscom/utils"
 )
 
-// @See:https://dev.poscom.cn/debug?group
 const GroupListUri = "http://api.poscom.cn:80/apisc/group"
 
 //
 //  List
-//  @Description:打印机分组列表完整结构体
+//  @Description:打印机分组列表数据返回结构体
 //
 type List struct {
 	Code    int       `json:"code"`

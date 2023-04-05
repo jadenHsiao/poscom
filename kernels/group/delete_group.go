@@ -18,21 +18,20 @@ import (
 	"github.com/jadenHsiao/poscom/utils"
 )
 
-//  @See:https://dev.poscom.cn/debug?delgroup
 const DeleteGroupUri = "http://api.poscom.cn:80/apisc/delgroup"
 
 //
 //  DelGroup
-//  @Description:删除打印机分组结构体
+//  @Description:删除打印机分组数据返回结构体
 //
 type DeleteGroup struct {
-	Code int
-	Msg  string
+	Code int    `json:"code"`
+	Msg  string `json:"msg"`
 }
 
 //
 // NewDeleteGroup
-//  @Description: 实例化删除打印机分组结构体
+//  @Description: 实例化删除打印机分组
 //  @return *DeleteGroup
 //
 func NewDeleteGroup() *DeleteGroup {
@@ -41,14 +40,14 @@ func NewDeleteGroup() *DeleteGroup {
 }
 
 //
-// DelGroup
+// Submit
 //  @Description: 删除账号下打印机分组
 //  @receiver deleteGroup
 //  @param params
 //  @return *DeleteGroup
 //  @return error
 //
-func (deleteGroup *DeleteGroup) DelGroup(params string) (*DeleteGroup, error) {
+func (deleteGroup *DeleteGroup) Submit(params string) (*DeleteGroup, error) {
 	uri := fmt.Sprintf("%v?%v", DeleteGroupUri, params)
 	ctx, err := utils.Send("POST", uri)
 	if nil != err {

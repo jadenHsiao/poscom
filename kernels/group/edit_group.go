@@ -18,43 +18,42 @@ MERCHANTABILITY OR FIT FOR A PARTICULAR PURPOSE.
 See the Mulan PSL v2 for more details.
 */
 
-// @See:https://dev.poscom.cn/debug?editgroup
 const EditGroupUri = "http://api.poscom.cn:80/apisc/editgroup"
 
 //
 //  EditGrp
-//  @Description:修改打印机分组名称结构体
+//  @Description:修改打印机分组名称数据返回结构体
 //
-type EditGrp struct {
-	Code int
-	Msg  string
+type EditGroup struct {
+	Code int    `json:"code"`
+	Msg  string `json:"msg"`
 }
 
 //
-// NewEditGrp
-//  @Description: 实例化修改打印机名称
+// NewEditGroup
+//  @Description: 实例化修改打印机分组名称
 //  @return *EditGroup
 //
-func NewEditGrp() *EditGrp {
-	editGrp := new(EditGrp)
+func NewEditGroup() *EditGroup {
+	editGrp := new(EditGroup)
 	return editGrp
 }
 
 //
-// EditGroup
-//  @Description:修改打印机分组名称
+// Submit
+//  @Description: 发起请求
 //  @receiver editGrp
 //  @param params
 //  @return *EditGrp
 //  @return error
 //
-func (editGrp *EditGrp) EditGroup(params string) (*EditGrp, error) {
+func (editGroup *EditGroup) Submit(params string) (*EditGroup, error) {
 	uri := fmt.Sprintf("%v?%v", EditGroupUri, params)
 	ctx, err := utils.Send("POST", uri)
 	if nil != err {
 		return nil, err
 	}
-	var result *EditGrp
+	var result *EditGroup
 	err = json.Unmarshal(ctx, &result)
 	if nil != err {
 		return nil, err

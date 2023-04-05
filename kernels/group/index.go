@@ -23,9 +23,9 @@ import (
 //  @Description:打印机分组结构体
 //
 type Group struct {
-	list      *List
-	delGroup  *DeleteGroup
-	editGroup *EditGrp
+	list        *List
+	deleteGroup *DeleteGroup
+	editGroup   *EditGroup
 	kernels.Base
 }
 
@@ -42,13 +42,13 @@ func NewGroup(config *kernels.Config) *Group {
 }
 
 //
-// GetGroupList
+// GroupList
 //  @Description:查询打印机分组列表
 //  @receiver group
 //  @return *List
 //  @return error
 //
-func (group *Group) GetGroupList() (*List, error) {
+func (group *Group) GroupList() (*List, error) {
 	securityCodeParams := utils.ToStrArr(
 		group.Config.MemberCode,
 		group.Timestamp,
@@ -67,14 +67,14 @@ func (group *Group) GetGroupList() (*List, error) {
 }
 
 //
-// DelGroup
+// DeleteGroup
 //  @Description:删除打印机分组
 //  @receiver group
 //  @param grpID
 //  @return *DeleteGroup
 //  @return error
 //
-func (group *Group) DelGroup(grpID string) (*DeleteGroup, error) {
+func (group *Group) DeleteGroup(grpID string) (*DeleteGroup, error) {
 	securityCodeParams := utils.ToStrArr(
 		group.Config.MemberCode,
 		group.Timestamp,
@@ -88,7 +88,7 @@ func (group *Group) DelGroup(grpID string) (*DeleteGroup, error) {
 		"securityCode": securityCode,
 		"grpID":        grpID,
 	}
-	result, err := NewDeleteGroup().DelGroup(
+	result, err := NewDeleteGroup().Submit(
 		utils.GenerateParam(utils.ParseParam(params), nil),
 	)
 	return result, err
@@ -100,10 +100,10 @@ func (group *Group) DelGroup(grpID string) (*DeleteGroup, error) {
 //  @receiver group
 //  @param grpID
 //  @param grpName
-//  @return *EditGrp
+//  @return *EditGroup
 //  @return error
 //
-func (group *Group) EditGroup(grpID string, grpName string) (*EditGrp, error) {
+func (group *Group) EditGroup(grpID string, grpName string) (*EditGroup, error) {
 	securityCodeParams := utils.ToStrArr(
 		group.Config.MemberCode,
 		group.Timestamp,
@@ -118,7 +118,7 @@ func (group *Group) EditGroup(grpID string, grpName string) (*EditGrp, error) {
 		"grpID":        grpID,
 		"grpName":      url.QueryEscape(grpName),
 	}
-	result, err := NewEditGrp().EditGroup(
+	result, err := NewEditGroup().Submit(
 		utils.GenerateParam(utils.ParseParam(params), nil),
 	)
 	return result, err
