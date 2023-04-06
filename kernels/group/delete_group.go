@@ -13,8 +13,6 @@ See the Mulan PSL v2 for more details.
 */
 
 import (
-	"encoding/json"
-	"fmt"
 	"github.com/jadenHsiao/poscom/utils"
 )
 
@@ -40,23 +38,18 @@ func NewDeleteGroup() *DeleteGroup {
 }
 
 //
-// Submit
+// Exec
 //  @Description: 删除账号下打印机分组
 //  @receiver deleteGroup
 //  @param params
 //  @return *DeleteGroup
 //  @return error
 //
-func (deleteGroup *DeleteGroup) Submit(params string) (*DeleteGroup, error) {
-	uri := fmt.Sprintf("%v?%v", DeleteGroupUri, params)
-	ctx, err := utils.Send("POST", uri)
-	if nil != err {
+func (deleteGroup *DeleteGroup) Exec(params string) (*DeleteGroup, error) {
+	ctx, err := utils.Submit(DeleteGroupUri, params, "POST")
+	if err != nil {
 		return nil, err
 	}
-	var result *DeleteGroup
-	err = json.Unmarshal(ctx, &result)
-	if nil != err {
-		return nil, err
-	}
-	return result, nil
+	result, err := utils.JsonDecode(ctx, new(DeleteGroup))
+	return result.(*DeleteGroup), err
 }

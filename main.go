@@ -29,9 +29,7 @@
 package main
 
 import (
-	"fmt"
 	"github.com/jadenHsiao/poscom/kernels"
-	"github.com/jadenHsiao/poscom/kernels/group"
 )
 
 func main() {
@@ -39,8 +37,8 @@ func main() {
 		ApiKey:     "GFTF57YONDFPJU2G1DV004YZTMD9LJAO",
 		MemberCode: "FC2A29F38B18C33C745504C3F6F668AD",
 	}
-	//fmt.Println(group.NewGroup(&cfg).GetGroupList())
-	//fmt.Println(group.NewGroup(&cfg).DelGroup("46341"))
-	fmt.Println(group.NewGroup(&cfg).EditGroup("46005", "分组3"))
+	//fmt.Println(group.NewGroup(&cfg).GroupList())
+	//fmt.Println(group.NewGroup(&cfg).DeleteGroup("46386"))
+	//fmt.Println(group.NewGroup(&cfg).EditGroup("46005", "分组2"))
 
 }

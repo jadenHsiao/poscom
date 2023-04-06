@@ -73,3 +73,21 @@ func ParseParam(params map[string]string) []string {
 	}
 	return result
 }
+
+//
+// Submit
+//  @Description: 发起请求并解析到数据
+//  @param uri
+//  @param params
+//  @param method
+//  @return []byte
+//  @return error
+//
+func Submit(uri string, params string, method string) ([]byte, error) {
+	uri = fmt.Sprintf("%v?%v", uri, params)
+	ctx, err := Send(method, uri)
+	if nil != err {
+		return nil, err
+	}
+	return ctx, nil
+}

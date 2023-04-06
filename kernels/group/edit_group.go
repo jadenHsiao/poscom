@@ -1,8 +1,6 @@
 package group
 
 import (
-	"encoding/json"
-	"fmt"
 	"github.com/jadenHsiao/poscom/utils"
 )
 
@@ -40,23 +38,18 @@ func NewEditGroup() *EditGroup {
 }
 
 //
-// Submit
+// Exec
 //  @Description: 发起请求
 //  @receiver editGrp
 //  @param params
 //  @return *EditGrp
 //  @return error
 //
-func (editGroup *EditGroup) Submit(params string) (*EditGroup, error) {
-	uri := fmt.Sprintf("%v?%v", EditGroupUri, params)
-	ctx, err := utils.Send("POST", uri)
-	if nil != err {
+func (editGroup *EditGroup) Exec(params string) (*EditGroup, error) {
+	ctx, err := utils.Submit(EditGroupUri, params, "POST")
+	if err != nil {
 		return nil, err
 	}
-	var result *EditGroup
-	err = json.Unmarshal(ctx, &result)
-	if nil != err {
-		return nil, err
-	}
-	return result, nil
+	result, err := utils.JsonDecode(ctx, new(EditGroup))
+	return result.(*EditGroup), err
 }

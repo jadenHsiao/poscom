@@ -13,8 +13,6 @@ See the Mulan PSL v2 for more details.
 */
 
 import (
-	"encoding/json"
-	"fmt"
 	"github.com/jadenHsiao/poscom/utils"
 )
 
@@ -50,23 +48,18 @@ func NewList() *List {
 }
 
 //
-// Group
+// Exec
 //  @Description: 查询打印机分组列表
 //  @receiver list
 //  @param params
 //  @return *List
 //  @return error
 //
-func (list *List) Group(params string) (*List, error) {
-	uri := fmt.Sprintf("%v?%v", GroupListUri, params)
-	ctx, err := utils.Send("GET", uri)
-	if nil != err {
+func (list *List) Exec(params string) (*List, error) {
+	ctx, err := utils.Submit(GroupListUri, params, "GET")
+	if err != nil {
 		return nil, err
 	}
-	var result *List
-	err = json.Unmarshal(ctx, &result)
-	if nil != err {
-		return nil, err
-	}
-	return result, nil
+	result, err := utils.JsonDecode(ctx, new(List))
+	return result.(*List), err
 }

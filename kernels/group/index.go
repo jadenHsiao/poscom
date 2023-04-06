@@ -60,7 +60,7 @@ func (group *Group) GroupList() (*List, error) {
 		"memberCode":   group.Base.Config.MemberCode,
 		"securityCode": securityCode,
 	}
-	result, err := NewList().Group(
+	result, err := NewList().Exec(
 		utils.GenerateParam(utils.ParseParam(params), nil),
 	)
 	return result, err
@@ -88,7 +88,7 @@ func (group *Group) DeleteGroup(grpID string) (*DeleteGroup, error) {
 		"securityCode": securityCode,
 		"grpID":        grpID,
 	}
-	result, err := NewDeleteGroup().Submit(
+	result, err := NewDeleteGroup().Exec(
 		utils.GenerateParam(utils.ParseParam(params), nil),
 	)
 	return result, err
@@ -118,7 +118,7 @@ func (group *Group) EditGroup(grpID string, grpName string) (*EditGroup, error) 
 		"grpID":        grpID,
 		"grpName":      url.QueryEscape(grpName),
 	}
-	result, err := NewEditGroup().Submit(
+	result, err := NewEditGroup().Exec(
 		utils.GenerateParam(utils.ParseParam(params), nil),
 	)
 	return result, err
