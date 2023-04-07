@@ -40,5 +40,6 @@ func main() {
 	//fmt.Println(group.NewGroup(&cfg).GroupList())
 	//fmt.Println(group.NewGroup(&cfg).DeleteGroup("46386"))
 	//fmt.Println(group.NewGroup(&cfg).EditGroup("46005", "分组2"))
+	//fmt.Println(group.NewGroup(&cfg).AddGroup("分组2"))
 
 }
