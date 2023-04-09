@@ -37,9 +37,12 @@ func main() {
 		ApiKey:     "GFTF57YONDFPJU2G1DV004YZTMD9LJAO",
 		MemberCode: "FC2A29F38B18C33C745504C3F6F668AD",
 	}
+	// 打印机分组
 	//fmt.Println(group.NewGroup(&cfg).GroupList())
 	//fmt.Println(group.NewGroup(&cfg).DeleteGroup("46386"))
 	//fmt.Println(group.NewGroup(&cfg).EditGroup("46005", "分组2"))
 	//fmt.Println(group.NewGroup(&cfg).AddGroup("分组2"))
-
+	// logo
+	//fmt.Println(logo.NewLogo(&cfg).SetLogo("00135465930408666", "1111"))
+	//fmt.Println(logo.NewLogo(&cfg).DeleteLogo("00135465930408666"))
 }
