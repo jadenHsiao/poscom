@@ -29,7 +29,9 @@
 package main
 
 import (
+	"fmt"
 	"github.com/jadenHsiao/poscom/kernels"
+	"github.com/jadenHsiao/poscom/kernels/device"
 )
 
 func main() {
@@ -45,4 +47,11 @@ func main() {
 	// logo
 	//fmt.Println(logo.NewLogo(&cfg).SetLogo("00135465930408666", "1111"))
 	//fmt.Println(logo.NewLogo(&cfg).DeleteLogo("00135465930408666"))
+	// 网络设置
+	//fmt.Println(devicesetting.NewDeviceSetting(&cfg).SendVolume("00135465930408666", 0))
+	//fmt.Println(devicesetting.NewDeviceSetting(&cfg).SetNet("00135465930408666", "wifi"))
+	//fmt.Println(devicesetting.NewDeviceSetting(&cfg).SendVoiceType("00135465930408666", 0))
+	// 打印机相关
+	//fmt.Println(device.NewDevice(&cfg).DeviceList())
+	fmt.Println(device.NewDevice(&cfg).DeviceDetail("00135465930408666"))
 }

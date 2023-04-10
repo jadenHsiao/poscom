@@ -14,40 +14,40 @@ MERCHANTABILITY OR FIT FOR A PARTICULAR PURPOSE.
 See the Mulan PSL v2 for more details.
 */
 
-const SetVolumeUri = "http://api.poscom.cn:80/apisc/sendVolume"
+const SetVoiceTypeUri = "https://api.poscom.cn:80/apisc/setVoiceType"
 
 //
-//  SendVolume
-//  @Description:打印机音量设置数据返回结构体
+//  SendVoiceType
+//  @Description:打印机切换播报类型数据返回结构体
 //
-type SendVolume struct {
+type SendVoiceType struct {
 	Code int    `json:"code"`
 	Msg  string `json:"msg"`
 }
 
 //
-// NewSendVolume
-//  @Description: 实例化打印机音量设置
-//  @return *SendVolume
+// NewSendVoiceType
+//  @Description: 实例化打印机切换播报类型
+//  @return *SendVoiceType
 //
-func NewSendVolume() *SendVolume {
-	sendVolume := new(SendVolume)
-	return sendVolume
+func NewSendVoiceType() *SendVoiceType {
+	sendVoiceType := new(SendVoiceType)
+	return sendVoiceType
 }
 
 //
 // Exec
 //  @Description: 发起请求
-//  @receiver sendVolume
+//  @receiver sendVoiceType
 //  @param params
-//  @return *SendVolume
+//  @return *SendVoiceType
 //  @return error
 //
-func (sendVolume *SendVolume) Exec(params string) (*SendVolume, error) {
-	ctx, err := utils.Submit(SetVolumeUri, params, "POST")
+func (sendVoiceType *SendVoiceType) Exec(params string) (*SendVoiceType, error) {
+	ctx, err := utils.Submit(SetVoiceTypeUri, params, "POST")
 	if err != nil {
 		return nil, err
 	}
-	result, err := utils.JsonDecode(ctx, new(SendVolume))
-	return result.(*SendVolume), err
+	result, err := utils.JsonDecode(ctx, new(SendVoiceType))
+	return result.(*SendVoiceType), err
 }
