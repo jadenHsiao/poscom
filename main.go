@@ -29,7 +29,9 @@
 package main
 
 import (
+	"fmt"
 	"github.com/jadenHsiao/poscom/kernels"
+	"github.com/jadenHsiao/poscom/kernels/setting"
 )
 
 func main() {
@@ -53,4 +55,7 @@ func main() {
 	//fmt.Println(device.NewDevice(&cfg).DeviceList())
 	//fmt.Println(device.NewDevice(&cfg).DeviceDetail("00135465930408666"))
 	//fmt.Println(device.NewDevice(&cfg).DeleteDevice("00135465930408666"))
+
+	// 设置相关
+	fmt.Println(setting.NewSetting(&cfg).SetPushUrl("http://www.baidu.co"))
 }
