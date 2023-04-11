@@ -18,29 +18,11 @@ import (
 )
 
 //
-// ArgsType2String
+// ToStrArr
 //  @Description: 参数数据类型转化为字符串
 //  @param args
 //  @return result
 //
-func ArgsType2String(args ...interface{}) (result []string) {
-	result = make([]string, len(args))
-	for key, val := range args {
-		dataType := reflect.TypeOf(val).Kind().String()
-		switch dataType {
-		case "string":
-		case "int":
-			val = strconv.Itoa(val.(int))
-		case "int64":
-			val = strconv.FormatInt(val.(int64), 10)
-		case "float64":
-			val = strconv.FormatFloat(val.(float64), 'E', -1, 64)
-		}
-		result[key] = val.(string)
-	}
-	return result
-}
-
 func ToStrArr(args ...interface{}) (result []string) {
 	result = make([]string, len(args))
 	for key, val := range args {
