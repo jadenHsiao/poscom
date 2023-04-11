@@ -23,6 +23,7 @@ import (
 type Device struct {
 	list   *List
 	Detail *DeviceDetail
+	Delete *DeleteDevice
 	kernels.Base
 }
 
@@ -86,6 +87,34 @@ func (device *Device) DeviceDetail(deviceID string) (*DeviceDetail, error) {
 		"deviceID":     deviceID,
 	}
 	result, err := NewDeviceDetail().Exec(
+		utils.GenerateParam(utils.ParseParam(params), nil),
+	)
+	return result, err
+}
+
+//
+// DeleteDevice
+//  @Description:删除打印机
+//  @receiver device
+//  @param deviceID
+//  @return *DeleteDevice
+//  @return error
+//
+func (device *Device) DeleteDevice(deviceID string) (*DeleteDevice, error) {
+	securityCodeParams := utils.ToStrArr(
+		device.Config.MemberCode,
+		device.Timestamp,
+		device.Config.ApiKey,
+		deviceID,
+	)
+	securityCode := utils.SecurityCode(securityCodeParams...)
+	params := map[string]string{
+		"reqTime":      device.Timestamp,
+		"memberCode":   device.Base.Config.MemberCode,
+		"securityCode": securityCode,
+		"deviceID":     deviceID,
+	}
+	result, err := NewDeleteDevice().Exec(
 		utils.GenerateParam(utils.ParseParam(params), nil),
 	)
 	return result, err

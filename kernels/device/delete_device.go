@@ -1,4 +1,4 @@
-package devicesetting
+package device
 
 import "github.com/jadenHsiao/poscom/utils"
 
@@ -14,40 +14,40 @@ MERCHANTABILITY OR FIT FOR A PARTICULAR PURPOSE.
 See the Mulan PSL v2 for more details.
 */
 
-const SetNetUri = "http://api.poscom.cn:80/apisc/setNet"
+const DeleteDeviceUri = "http://api.poscom.cn:80/apisc/deldev"
 
 //
-//  SetNet
-//  @Description:网络链接方式设置数据返回结构体
+//  DeleteDevice
+//  @Description: 删除打印机数据返回结构体
 //
-type SetNet struct {
+type DeleteDevice struct {
 	Code int    `json:"code"`
 	Msg  string `json:"msg"`
 }
 
 //
-// NewSetNet
-//  @Description: 实例化网络链接设置方式
-//  @return *SetNet
+// NewDeleteDevice
+//  @Description: 实例化删除打印机
+//  @return *DeleteDevice
 //
-func NewSetNet() *SetNet {
-	setNet := new(SetNet)
-	return setNet
+func NewDeleteDevice() *DeleteDevice {
+	deleteDevice := new(DeleteDevice)
+	return deleteDevice
 }
 
 //
 // Exec
-//  @Description: 发起请求
-//  @receiver setNet
+//  @Description: 发送请求
+//  @receiver deleteDevice
 //  @param params
-//  @return *SetNet
+//  @return *DeleteDevice
 //  @return error
 //
-func (setNet *SetNet) Exec(params string) (*SetNet, error) {
-	ctx, err := utils.Send(SetNetUri, params, "POST")
+func (deleteDevice *DeleteDevice) Exec(params string) (*DeleteDevice, error) {
+	ctx, err := utils.Send(DeleteDeviceUri, params, "POST")
 	if err != nil {
 		return nil, err
 	}
-	result, err := utils.JsonDecode(ctx, new(SetNet))
-	return result.(*SetNet), err
+	result, err := utils.JsonDecode(ctx, new(DeleteDevice))
+	return result.(*DeleteDevice), err
 }

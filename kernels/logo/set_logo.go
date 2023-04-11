@@ -44,7 +44,7 @@ func NewSetLogo() *SetLogo {
 //  @return error
 //
 func (setLogo *SetLogo) Exec(params string) (*SetLogo, error) {
-	ctx, err := utils.Submit(SetLogoUri, params, "POST")
+	ctx, err := utils.Send(SetLogoUri, params, "POST")
 	if err != nil {
 		return nil, err
 	}

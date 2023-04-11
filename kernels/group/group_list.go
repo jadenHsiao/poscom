@@ -56,7 +56,7 @@ func NewList() *List {
 //  @return error
 //
 func (list *List) Exec(params string) (*List, error) {
-	ctx, err := utils.Submit(GroupListUri, params, "GET")
+	ctx, err := utils.Send(GroupListUri, params, "GET")
 	if err != nil {
 		return nil, err
 	}

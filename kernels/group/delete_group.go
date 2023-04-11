@@ -46,7 +46,7 @@ func NewDeleteGroup() *DeleteGroup {
 //  @return error
 //
 func (deleteGroup *DeleteGroup) Exec(params string) (*DeleteGroup, error) {
-	ctx, err := utils.Submit(DeleteGroupUri, params, "POST")
+	ctx, err := utils.Send(DeleteGroupUri, params, "POST")
 	if err != nil {
 		return nil, err
 	}

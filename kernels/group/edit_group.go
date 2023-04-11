@@ -46,7 +46,7 @@ func NewEditGroup() *EditGroup {
 //  @return error
 //
 func (editGroup *EditGroup) Exec(params string) (*EditGroup, error) {
-	ctx, err := utils.Submit(EditGroupUri, params, "POST")
+	ctx, err := utils.Send(EditGroupUri, params, "POST")
 	if err != nil {
 		return nil, err
 	}

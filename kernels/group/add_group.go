@@ -47,7 +47,7 @@ func NewAddGroup() *AddGroup {
 //  @return error
 //
 func (addGroup *AddGroup) Exec(params string) (*AddGroup, error) {
-	ctx, err := utils.Submit(AddGroupUri, params, "POST")
+	ctx, err := utils.Send(AddGroupUri, params, "POST")
 	if err != nil {
 		return nil, err
 	}

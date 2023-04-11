@@ -55,7 +55,7 @@ func NewList() *List {
 //  @return error
 //
 func (list *List) Exec(params string) (*List, error) {
-	ctx, err := utils.Submit(DeviceListUri, params, "POST")
+	ctx, err := utils.Send(DeviceListUri, params, "POST")
 	if err != nil {
 		return nil, err
 	}

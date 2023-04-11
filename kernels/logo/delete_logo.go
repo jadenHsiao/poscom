@@ -44,7 +44,7 @@ func NewDeleteLogo() *DeleteLogo {
 //  @return error
 //
 func (deleteLogo *DeleteLogo) Exec(params string) (*DeleteLogo, error) {
-	ctx, err := utils.Submit(DeleteLogoUri, params, "POST")
+	ctx, err := utils.Send(DeleteLogoUri, params, "POST")
 	if err != nil {
 		return nil, err
 	}

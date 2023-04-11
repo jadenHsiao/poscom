@@ -44,7 +44,7 @@ func NewSendVoiceType() *SendVoiceType {
 //  @return error
 //
 func (sendVoiceType *SendVoiceType) Exec(params string) (*SendVoiceType, error) {
-	ctx, err := utils.Submit(SetVoiceTypeUri, params, "POST")
+	ctx, err := utils.Send(SetVoiceTypeUri, params, "POST")
 	if err != nil {
 		return nil, err
 	}

@@ -59,7 +59,7 @@ func NewDeviceDetail() *DeviceDetail {
 //  @return error
 //
 func (deviceDetail *DeviceDetail) Exec(params string) (*DeviceDetail, error) {
-	ctx, err := utils.Submit(DeviceUri, params, "POST")
+	ctx, err := utils.Send(DeviceUri, params, "POST")
 	if err != nil {
 		return nil, err
 	}

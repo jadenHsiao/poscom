@@ -23,12 +23,14 @@ import (
 // Send
 //  @Description: 发起网络请求
 //  @param method string 请求类型
+//	@param params string 请求参数
 //  @param uri string 目标 url
 //  @return result
 //  @return err
 //
-func Send(method string, uri string) (result []byte, err error) {
+func Send(uri string, params string, method string) (result []byte, err error) {
 	var resp *http.Response
+	uri = fmt.Sprintf("%v?%v", uri, params)
 	if "GET" == method {
 		resp, err = http.Get(uri)
 	} else if "POST" == method {
@@ -72,22 +74,4 @@ func ParseParam(params map[string]string) []string {
 		result = append(result, fmt.Sprintf("%v=%v", key, val))
 	}
 	return result
-}
-
-//
-// Submit
-//  @Description: 发起请求并解析到数据
-//  @param uri
-//  @param params
-//  @param method
-//  @return []byte
-//  @return error
-//
-func Submit(uri string, params string, method string) ([]byte, error) {
-	uri = fmt.Sprintf("%v?%v", uri, params)
-	ctx, err := Send(method, uri)
-	if nil != err {
-		return nil, err
-	}
-	return ctx, nil
 }

@@ -44,7 +44,7 @@ func NewSendVolume() *SendVolume {
 //  @return error
 //
 func (sendVolume *SendVolume) Exec(params string) (*SendVolume, error) {
-	ctx, err := utils.Submit(SetVolumeUri, params, "POST")
+	ctx, err := utils.Send(SetVolumeUri, params, "POST")
 	if err != nil {
 		return nil, err
 	}

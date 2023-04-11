@@ -29,9 +29,7 @@
 package main
 
 import (
-	"fmt"
 	"github.com/jadenHsiao/poscom/kernels"
-	"github.com/jadenHsiao/poscom/kernels/device"
 )
 
 func main() {
@@ -53,5 +51,6 @@ func main() {
 	//fmt.Println(devicesetting.NewDeviceSetting(&cfg).SendVoiceType("00135465930408666", 0))
 	// 打印机相关
 	//fmt.Println(device.NewDevice(&cfg).DeviceList())
-	fmt.Println(device.NewDevice(&cfg).DeviceDetail("00135465930408666"))
+	//fmt.Println(device.NewDevice(&cfg).DeviceDetail("00135465930408666"))
+	//fmt.Println(device.NewDevice(&cfg).DeleteDevice("00135465930408666"))
 }
