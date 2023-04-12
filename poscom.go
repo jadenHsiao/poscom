@@ -17,6 +17,7 @@ import (
 	"github.com/jadenHsiao/poscom/kernels/device"
 	"github.com/jadenHsiao/poscom/kernels/devicesetting"
 	"github.com/jadenHsiao/poscom/kernels/group"
+	"github.com/jadenHsiao/poscom/kernels/printer"
 	"github.com/jadenHsiao/poscom/kernels/setting"
 )
 
@@ -27,6 +28,7 @@ type Gainscha struct {
 	setting       *setting.Setting
 	devicesetting *devicesetting.DeviceSetting
 	device        *device.Device
+	printer       *printer.Printer
 }
 
 //
@@ -83,4 +85,15 @@ func (gainscha *Gainscha) DeviceSetting() *devicesetting.DeviceSetting {
 func (gainscha *Gainscha) Device() *device.Device {
 	gainscha.device = device.NewDevice(gainscha.config)
 	return gainscha.device
+}
+
+//
+// Printer
+//  @Description: 打印
+//  @receiver gainscha
+//  @return *printer.Printer
+//
+func (gainscha *Gainscha) Printer() *printer.Printer {
+	gainscha.printer = printer.NewPrinter(gainscha.config)
+	return gainscha.printer
 }
