@@ -22,8 +22,8 @@ import (
 //
 type Device struct {
 	list   *List
-	Detail *DeviceDetail
-	Delete *DeleteDevice
+	detail *DeviceDetail
+	delete *DeleteDevice
 	kernels.Base
 }
 
@@ -61,7 +61,8 @@ func (device *Device) DeviceList() (*List, error) {
 	result, err := NewList().Exec(
 		utils.GenerateParam(utils.ParseParam(params), nil),
 	)
-	return result, err
+	device.list = result
+	return device.list, err
 }
 
 //
@@ -89,7 +90,8 @@ func (device *Device) DeviceDetail(deviceID string) (*DeviceDetail, error) {
 	result, err := NewDeviceDetail().Exec(
 		utils.GenerateParam(utils.ParseParam(params), nil),
 	)
-	return result, err
+	device.detail = result
+	return device.detail, err
 }
 
 //
@@ -117,5 +119,6 @@ func (device *Device) DeleteDevice(deviceID string) (*DeleteDevice, error) {
 	result, err := NewDeleteDevice().Exec(
 		utils.GenerateParam(utils.ParseParam(params), nil),
 	)
-	return result, err
+	device.delete = result
+	return device.delete, err
 }

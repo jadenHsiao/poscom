@@ -26,12 +26,11 @@
 //	//fmt.Println(gainscha.SetPushUrl("00135465930408666"))
 //	//fmt.Println(gainscha.SetLogo("00135465930408666", "1111"))
 //}
-package main
+package poscom
 
 import (
 	"fmt"
 	"github.com/jadenHsiao/poscom/kernels"
-	"github.com/jadenHsiao/poscom/kernels/setting"
 )
 
 func main() {
@@ -39,6 +38,8 @@ func main() {
 		ApiKey:     "GFTF57YONDFPJU2G1DV004YZTMD9LJAO",
 		MemberCode: "FC2A29F38B18C33C745504C3F6F668AD",
 	}
+
+	fmt.Println(NewGainscha(&cfg).Device().DeviceList())
 	// 打印机分组
 	//fmt.Println(group.NewGroup(&cfg).GroupList())
 	//fmt.Println(group.NewGroup(&cfg).DeleteGroup("46386"))
@@ -57,5 +58,6 @@ func main() {
 	//fmt.Println(device.NewDevice(&cfg).DeleteDevice("00135465930408666"))
 
 	// 设置相关
-	fmt.Println(setting.NewSetting(&cfg).SetPushUrl("http://www.baidu.co"))
+	//fmt.Println(setting.NewSetting(&cfg).SetPushUrl("http://www.baidu.co"))
+	//fmt.Println(setting.NewSetting(&cfg).RomUpdate("00135465930408666", ""))
 }

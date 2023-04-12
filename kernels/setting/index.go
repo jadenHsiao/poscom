@@ -21,6 +21,8 @@ import (
 //  @Description: 设置相关结构体
 //
 type Setting struct {
+	setPushUrl *SetPushUrl
+	romUpdate  *RomUpdate
 	kernels.Base
 }
 
@@ -49,6 +51,7 @@ func (setting *Setting) SetPushUrl(pushUrl string) (*SetPushUrl, error) {
 		setting.Config.MemberCode,
 		setting.Timestamp,
 		setting.Config.ApiKey,
+		pushUrl,
 	)
 	securityCode := utils.SecurityCode(securityCodeParams...)
 	params := map[string]string{
@@ -60,5 +63,37 @@ func (setting *Setting) SetPushUrl(pushUrl string) (*SetPushUrl, error) {
 	result, err := NewSetPushUrl().Exec(
 		utils.GenerateParam(utils.ParseParam(params), nil),
 	)
-	return result, err
+	setting.setPushUrl = result
+	return setting.setPushUrl, err
+}
+
+//
+// RomUpdate
+//  @Description:票据打印机固件升级
+//  @receiver setting
+//  @param deviceID
+//  @param version
+//  @return *RomUpdate
+//  @return error
+//
+func (setting *Setting) RomUpdate(deviceID string, version string) (*RomUpdate, error) {
+	securityCodeParams := utils.ToStrArr(
+		setting.Config.MemberCode,
+		setting.Timestamp,
+		setting.Config.ApiKey,
+		deviceID,
+	)
+	securityCode := utils.SecurityCode(securityCodeParams...)
+	params := map[string]string{
+		"reqTime":      setting.Timestamp,
+		"memberCode":   setting.Base.Config.MemberCode,
+		"securityCode": securityCode,
+		"deviceID":     deviceID,
+		"version":      version,
+	}
+	result, err := NewRomUpdate().Exec(
+		utils.GenerateParam(utils.ParseParam(params), nil),
+	)
+	setting.romUpdate = result
+	return setting.romUpdate, err
 }

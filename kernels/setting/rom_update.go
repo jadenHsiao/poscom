@@ -1,5 +1,7 @@
 package setting
 
+import "github.com/jadenHsiao/poscom/utils"
+
 /**
 Copyright (c) [2023] [jaden Hsiao]
 [Poscom] is licensed under Mulan PSL v2.
@@ -12,42 +14,40 @@ MERCHANTABILITY OR FIT FOR A PARTICULAR PURPOSE.
 See the Mulan PSL v2 for more details.
 */
 
-import "github.com/jadenHsiao/poscom/utils"
-
-const SetPushUrlUri = "https://api.poscom.cn/apisc/setPushUrl"
+const RomUpdateUri = "http://api.poscom.cn/apisc/romupdate"
 
 //
-//  SetPushUrl
-//  @Description:设置接受服务器信息推送地址数据返回结构体
+//  RomUpdate
+//  @Description:票据打印机固件升级数据返回结构体
 //
-type SetPushUrl struct {
+type RomUpdate struct {
 	Code int    `json:"code"`
 	Msg  string `json:"msg"`
 }
 
 //
-// NewSetPushUrl
-//  @Description: 实例化设置接受服务器信息推送地址
-//  @return *SetPushUrl
+// NewRomUpdate
+//  @Description: 实例化票据打印机固件升级
+//  @return *RomUpdate
 //
-func NewSetPushUrl() *SetPushUrl {
-	setPushUrl := new(SetPushUrl)
-	return setPushUrl
+func NewRomUpdate() *RomUpdate {
+	romUpdate := new(RomUpdate)
+	return romUpdate
 }
 
 //
 // Exec
 //  @Description: 发起请求
-//  @receiver setPushUrl
+//  @receiver romUpdate
 //  @param params
-//  @return *SetPushUrl
+//  @return *RomUpdate
 //  @return error
 //
-func (setPushUrl *SetPushUrl) Exec(params string) (*SetPushUrl, error) {
-	ctx, err := utils.Send(SetPushUrlUri, params, "POST")
+func (romUpdate *RomUpdate) Exec(params string) (*RomUpdate, error) {
+	ctx, err := utils.Send(RomUpdateUri, params, "POST")
 	if err != nil {
 		return nil, err
 	}
-	result, err := utils.JsonDecode(ctx, new(SetPushUrl))
-	return result.(*SetPushUrl), err
+	result, err := utils.JsonDecode(ctx, new(RomUpdate))
+	return result.(*RomUpdate), err
 }

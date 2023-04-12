@@ -61,7 +61,8 @@ func (group *Group) GroupList() (*List, error) {
 	result, err := NewList().Exec(
 		utils.GenerateParam(utils.ParseParam(params), nil),
 	)
-	return result, err
+	group.list = result
+	return group.list, err
 }
 
 // DeleteGroup
@@ -88,7 +89,8 @@ func (group *Group) DeleteGroup(grpID string) (*DeleteGroup, error) {
 	result, err := NewDeleteGroup().Exec(
 		utils.GenerateParam(utils.ParseParam(params), nil),
 	)
-	return result, err
+	group.deleteGroup = result
+	return group.deleteGroup, err
 }
 
 // EditGroup
@@ -117,7 +119,8 @@ func (group *Group) EditGroup(grpID string, grpName string) (*EditGroup, error) 
 	result, err := NewEditGroup().Exec(
 		utils.GenerateParam(utils.ParseParam(params), nil),
 	)
-	return result, err
+	group.editGroup = result
+	return group.editGroup, err
 }
 
 //
@@ -144,5 +147,6 @@ func (group *Group) AddGroup(grpName string) (*AddGroup, error) {
 	result, err := NewAddGroup().Exec(
 		utils.GenerateParam(utils.ParseParam(params), nil),
 	)
-	return result, err
+	group.addGroup = result
+	return group.addGroup, err
 }

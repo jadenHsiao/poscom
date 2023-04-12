@@ -66,7 +66,8 @@ func (logo *Logo) SetLogo(deviceID string, imgUrl string) (*SetLogo, error) {
 	result, err := NewSetLogo().Exec(
 		utils.GenerateParam(utils.ParseParam(params), nil),
 	)
-	return result, err
+	logo.setLogo = result
+	return logo.setLogo, err
 }
 
 //
@@ -94,5 +95,6 @@ func (logo *Logo) DeleteLogo(deviceID string) (*DeleteLogo, error) {
 	result, err := NewDeleteLogo().Exec(
 		utils.GenerateParam(utils.ParseParam(params), nil),
 	)
-	return result, err
+	logo.deleteLogo = result
+	return logo.deleteLogo, err
 }

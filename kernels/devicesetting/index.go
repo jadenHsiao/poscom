@@ -68,7 +68,8 @@ func (deviceSetting *DeviceSetting) SetNet(deviceID string, netType string) (*Se
 	result, err := NewSetNet().Exec(
 		utils.GenerateParam(utils.ParseParam(params), nil),
 	)
-	return result, err
+	deviceSetting.setNet = result
+	return deviceSetting.setNet, err
 }
 
 //
@@ -98,7 +99,8 @@ func (deviceSetting *DeviceSetting) SendVolume(deviceID string, volume int) (*Se
 	result, err := NewSendVolume().Exec(
 		utils.GenerateParam(utils.ParseParam(params), nil),
 	)
-	return result, err
+	deviceSetting.sendVolume = result
+	return deviceSetting.sendVolume, err
 }
 
 //
@@ -128,5 +130,6 @@ func (deviceSetting *DeviceSetting) SendVoiceType(deviceID string, voiceType int
 	result, err := NewSendVoiceType().Exec(
 		utils.GenerateParam(utils.ParseParam(params), nil),
 	)
-	return result, err
+	deviceSetting.sendVoiceType = result
+	return deviceSetting.sendVoiceType, err
 }
