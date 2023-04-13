@@ -25,6 +25,7 @@ type Printer struct {
 	queryState    *QueryState
 	listException *ListException
 	getStatus     *GetStatus
+	cancelPrint   *CancelPrint
 	kernels.Base
 }
 
@@ -133,4 +134,35 @@ func (printer *Printer) GetStatus(deviceID string) (*GetStatus, error) {
 	)
 	printer.getStatus = result
 	return printer.getStatus, err
+}
+
+//
+// CancelPrint
+//  @Description:删除账号下指定模板
+//  @receiver printer
+//  @param deviceID
+//  @param all
+//  @return *CancelPrint
+//  @return error
+//
+func (printer *Printer) CancelPrint(deviceID string, all string) (*CancelPrint, error) {
+	securityCodeParams := utils.ToStrArr(
+		printer.Config.MemberCode,
+		printer.Timestamp,
+		printer.Config.ApiKey,
+		deviceID,
+	)
+	securityCode := utils.SecurityCode(securityCodeParams...)
+	params := map[string]string{
+		"reqTime":      printer.Timestamp,
+		"memberCode":   printer.Base.Config.MemberCode,
+		"securityCode": securityCode,
+		"deviceID":     deviceID,
+		"all":          all,
+	}
+	result, err := NewCancelPrint().Exec(
+		utils.GenerateParam(utils.ParseParam(params), nil),
+	)
+	printer.cancelPrint = result
+	return printer.cancelPrint, err
 }

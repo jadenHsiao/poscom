@@ -12,5 +12,6 @@ func main() {
 	//fmt.Println(gainscha.Printer().QueryState("1000001896147286"))
 	//fmt.Println(gainscha.Printer().ListException("00135465930408666", "", ""))
 	//fmt.Println(gainscha.Printer().GetStatus(""))
-	fmt.Println(gainscha.Printer().GetStatus(""))
+	//fmt.Println(gainscha.Printer().GetStatus(""))
+	fmt.Println(gainscha.Printer().CancelPrint("00135465930408666", "0"))
 }
