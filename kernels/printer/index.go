@@ -22,7 +22,9 @@ See the Mulan PSL v2 for more details.
 //  @Description:打印相关结构体
 //
 type Printer struct {
-	queryState *QueryState
+	queryState    *QueryState
+	listException *ListException
+	getStatus     *GetStatus
 	kernels.Base
 }
 
@@ -65,4 +67,70 @@ func (printer *Printer) QueryState(msgNo string) (*QueryState, error) {
 	)
 	printer.queryState = result
 	return printer.queryState, err
+}
+
+//
+// ListException
+//  @Description: 查询打印异常信息
+//  @receiver printer
+//  @param deviceID
+//  @param start
+//  @param end
+//  @return *ListException
+//  @return error
+//
+func (printer *Printer) ListException(deviceID string, start string, end string) (*ListException, error) {
+	securityCodeParams := utils.ToStrArr(
+		printer.Config.MemberCode,
+		printer.Timestamp,
+		printer.Config.ApiKey,
+	)
+	securityCode := utils.SecurityCode(securityCodeParams...)
+	params := map[string]string{
+		"reqTime":      printer.Timestamp,
+		"memberCode":   printer.Base.Config.MemberCode,
+		"securityCode": securityCode,
+		"deviceID":     deviceID,
+	}
+	if 0 != len(start) {
+		params["start"] = start
+	}
+	if 0 != len(end) {
+		params["end"] = end
+	}
+	result, err := NewListException().Exec(
+		utils.GenerateParam(utils.ParseParam(params), nil),
+	)
+	printer.listException = result
+	return printer.listException, err
+}
+
+//
+// GetStatus
+//  @Description: 获取打印机状态
+//  @receiver printer
+//  @param deviceID
+//  @return *GetStatus
+//  @return error
+//
+func (printer *Printer) GetStatus(deviceID string) (*GetStatus, error) {
+	securityCodeParams := utils.ToStrArr(
+		printer.Config.MemberCode,
+		printer.Timestamp,
+		printer.Config.ApiKey,
+	)
+	securityCode := utils.SecurityCode(securityCodeParams...)
+	params := map[string]string{
+		"reqTime":      printer.Timestamp,
+		"memberCode":   printer.Base.Config.MemberCode,
+		"securityCode": securityCode,
+	}
+	if 0 != len(deviceID) {
+		params["deviceID"] = deviceID
+	}
+	result, err := NewGetStatus().Exec(
+		utils.GenerateParam(utils.ParseParam(params), nil),
+	)
+	printer.getStatus = result
+	return printer.getStatus, err
 }

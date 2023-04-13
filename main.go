@@ -28,18 +28,13 @@
 //}
 package poscom
 
-import (
-	"fmt"
-	"github.com/jadenHsiao/poscom/kernels"
-)
-
 func main() {
-	cfg := kernels.Config{
-		ApiKey:     "GFTF57YONDFPJU2G1DV004YZTMD9LJAO",
-		MemberCode: "FC2A29F38B18C33C745504C3F6F668AD",
-	}
+	//cfg := kernels.Config{
+	//	ApiKey:     "GFTF57YONDFPJU2G1DV004YZTMD9LJAO",
+	//	MemberCode: "FC2A29F38B18C33C745504C3F6F668AD",
+	//}
 
-	fmt.Println(NewGainscha(&cfg).Device().DeviceList())
+	//fmt.Println(NewGainscha(&cfg).Device().DeviceList())
 	// 打印机分组
 	//fmt.Println(group.NewGroup(&cfg).GroupList())
 	//fmt.Println(group.NewGroup(&cfg).DeleteGroup("46386"))

@@ -38,9 +38,9 @@ type Gainscha struct {
 //
 func NewGainscha(apiKey string, memberCode string) *Gainscha {
 	cfg := kernels.Config{ApiKey: apiKey, MemberCode: memberCode}
-	return &Gainscha{
-		config: &cfg,
-	}
+	gainscha := new(Gainscha)
+	gainscha.config = &cfg
+	return gainscha
 }
 
 //
