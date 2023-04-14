@@ -24,6 +24,7 @@ type Device struct {
 	list   *List
 	detail *DeviceDetail
 	delete *DeleteDevice
+	add    *AddDevice
 	kernels.Base
 }
 
@@ -121,4 +122,51 @@ func (device *Device) DeleteDevice(deviceID string) (*DeleteDevice, error) {
 	)
 	device.delete = result
 	return device.delete, err
+}
+
+//
+// AddDevice
+//  @Description: 添加打印机设备
+//  @receiver device
+//  @param deviceID
+//  @param devName
+//  @param grpID
+//  @param mPhone
+//  @param nPhone
+//  @param cutting
+//  @return *AddDevice
+//  @return error
+//
+func (device *Device) AddDevice(deviceID string, devName string, grpID string, mPhone string, nPhone string, cutting string) (*AddDevice, error) {
+	securityCodeParams := utils.ToStrArr(
+		device.Config.MemberCode,
+		device.Timestamp,
+		device.Config.ApiKey,
+		deviceID,
+	)
+	securityCode := utils.SecurityCode(securityCodeParams...)
+	params := map[string]string{
+		"reqTime":      device.Timestamp,
+		"memberCode":   device.Base.Config.MemberCode,
+		"securityCode": securityCode,
+		"deviceID":     deviceID,
+		"devName":      devName,
+	}
+	if 0 != len(grpID) {
+		params["grpID"] = grpID
+	}
+	if 0 != len(mPhone) {
+		params["mPhone"] = mPhone
+	}
+	if 0 != len(nPhone) {
+		params["nPhone"] = nPhone
+	}
+	if 0 != len(cutting) {
+		params["cutting"] = cutting
+	}
+	result, err := NewAddDevice().Exec(
+		utils.GenerateParam(utils.ParseParam(params), nil),
+	)
+	device.add = result
+	return device.add, err
 }
