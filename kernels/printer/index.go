@@ -26,6 +26,7 @@ type Printer struct {
 	listException *ListException
 	getStatus     *GetStatus
 	cancelPrint   *CancelPrint
+	sendMsg       *SendMsg
 	kernels.Base
 }
 
@@ -165,4 +166,50 @@ func (printer *Printer) CancelPrint(deviceID string, all string) (*CancelPrint, 
 	)
 	printer.cancelPrint = result
 	return printer.cancelPrint, err
+}
+
+//
+// SendMsg
+//  @Description:发送数据到打印机
+//  @receiver printer
+//  @param deviceID
+//  @param mode
+//  @param msgDetail
+//  @param optionalParams
+//  @return *SendMsg
+//  @return error
+//
+func (printer *Printer) SendMsg(deviceID string, mode string, msgDetail string, optionalParams map[string]string) (*SendMsg, error) {
+	tempSlice := []string{
+		printer.Config.MemberCode,
+		deviceID,
+		printer.Timestamp,
+		printer.Config.ApiKey,
+	}
+	if 0 != len(optionalParams["msgNo"]) {
+		tempSlice = append(tempSlice, "")
+		index := 2
+		copy(tempSlice[index+1:], tempSlice[index:])
+		tempSlice[index] = optionalParams["msgNo"]
+	}
+	securityCodeParams := utils.ToStrArr(tempSlice)
+	securityCode := utils.SecurityCode(securityCodeParams...)
+	params := map[string]string{
+		"reqTime":      printer.Timestamp,
+		"memberCode":   printer.Base.Config.MemberCode,
+		"securityCode": securityCode,
+		"deviceID":     deviceID,
+		"mode":         mode,
+		"msgDetail":    msgDetail,
+	}
+	if 0 != len(optionalParams) {
+		for key, val := range optionalParams {
+			params[key] = val
+		}
+	}
+	result, err := NewSendMsg().Exec(
+		utils.GenerateParam(utils.ParseParam(params), nil),
+	)
+	printer.sendMsg = result
+	return printer.sendMsg, err
 }

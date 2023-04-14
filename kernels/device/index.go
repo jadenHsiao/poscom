@@ -14,6 +14,7 @@ See the Mulan PSL v2 for more details.
 import (
 	"github.com/jadenHsiao/poscom/kernels"
 	"github.com/jadenHsiao/poscom/utils"
+	"net/url"
 )
 
 //
@@ -25,6 +26,7 @@ type Device struct {
 	detail *DeviceDetail
 	delete *DeleteDevice
 	add    *AddDevice
+	edit   *EditDevice
 	kernels.Base
 }
 
@@ -130,14 +132,11 @@ func (device *Device) DeleteDevice(deviceID string) (*DeleteDevice, error) {
 //  @receiver device
 //  @param deviceID
 //  @param devName
-//  @param grpID
-//  @param mPhone
-//  @param nPhone
-//  @param cutting
+//  @param optionalParams
 //  @return *AddDevice
 //  @return error
 //
-func (device *Device) AddDevice(deviceID string, devName string, grpID string, mPhone string, nPhone string, cutting string) (*AddDevice, error) {
+func (device *Device) AddDevice(deviceID string, devName string, optionalParams map[string]string) (*AddDevice, error) {
 	securityCodeParams := utils.ToStrArr(
 		device.Config.MemberCode,
 		device.Timestamp,
@@ -150,23 +149,55 @@ func (device *Device) AddDevice(deviceID string, devName string, grpID string, m
 		"memberCode":   device.Base.Config.MemberCode,
 		"securityCode": securityCode,
 		"deviceID":     deviceID,
-		"devName":      devName,
+		"devName":      url.QueryEscape(devName),
 	}
-	if 0 != len(grpID) {
-		params["grpID"] = grpID
-	}
-	if 0 != len(mPhone) {
-		params["mPhone"] = mPhone
-	}
-	if 0 != len(nPhone) {
-		params["nPhone"] = nPhone
-	}
-	if 0 != len(cutting) {
-		params["cutting"] = cutting
+	if 0 != len(optionalParams) {
+		for key, val := range optionalParams {
+			params[key] = val
+		}
 	}
 	result, err := NewAddDevice().Exec(
 		utils.GenerateParam(utils.ParseParam(params), nil),
 	)
 	device.add = result
 	return device.add, err
+}
+
+//
+// EditDevice
+//  @Description: 编辑打印机设备
+//  @receiver device
+//  @param deviceID
+//  @param optionalParams
+//  @return *EditDevice
+//  @return error
+//
+func (device *Device) EditDevice(deviceID string, optionalParams map[string]string) (*EditDevice, error) {
+	securityCodeParams := utils.ToStrArr(
+		device.Config.MemberCode,
+		device.Timestamp,
+		device.Config.ApiKey,
+		deviceID,
+	)
+	securityCode := utils.SecurityCode(securityCodeParams...)
+	params := map[string]string{
+		"reqTime":      device.Timestamp,
+		"memberCode":   device.Base.Config.MemberCode,
+		"securityCode": securityCode,
+		"deviceID":     deviceID,
+	}
+	if 0 != len(optionalParams) {
+		for key, val := range optionalParams {
+			if "devName" == key {
+				params[key] = url.QueryEscape(val)
+			} else {
+				params[key] = val
+			}
+		}
+	}
+	result, err := NewEditDevice().Exec(
+		utils.GenerateParam(utils.ParseParam(params), nil),
+	)
+	device.edit = result
+	return device.edit, err
 }
