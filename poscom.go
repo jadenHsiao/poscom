@@ -19,6 +19,7 @@ import (
 	"github.com/jadenHsiao/poscom/kernels/group"
 	"github.com/jadenHsiao/poscom/kernels/printer"
 	"github.com/jadenHsiao/poscom/kernels/setting"
+	"github.com/jadenHsiao/poscom/kernels/template"
 )
 
 //  佳博打印结构体
@@ -29,6 +30,7 @@ type Gainscha struct {
 	devicesetting *devicesetting.DeviceSetting
 	device        *device.Device
 	printer       *printer.Printer
+	template      *template.Template
 }
 
 //
@@ -96,4 +98,15 @@ func (gainscha *Gainscha) Device() *device.Device {
 func (gainscha *Gainscha) Printer() *printer.Printer {
 	gainscha.printer = printer.NewPrinter(gainscha.config)
 	return gainscha.printer
+}
+
+//
+// Template
+//  @Description: 模板
+//  @receiver gainscha
+//  @return *template.Template
+//
+func (gainscha *Gainscha) Template() *template.Template {
+	gainscha.template = template.NewTemplate(gainscha.config)
+	return gainscha.template
 }

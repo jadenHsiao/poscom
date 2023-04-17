@@ -1,6 +1,7 @@
 package main
 
 import (
+	"fmt"
 	"github.com/jadenHsiao/poscom"
 )
 
@@ -15,4 +16,5 @@ func main() {
 	//fmt.Println(gainscha.Printer().CancelPrint("00135465930408666", "0"))
 	//fmt.Println(gainscha.Device().AddDevice("1111111", "231232", make(map[string]string)))
 	//fmt.Println(gainscha.Device().EditDevice("00135465930408666", map[string]string{"devName": "打印机"}))
+	fmt.Println(gainscha.Template().ListTemplate())
 }
