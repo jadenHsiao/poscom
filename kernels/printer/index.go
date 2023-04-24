@@ -1,6 +1,7 @@
 package printer
 
 import (
+	"encoding/hex"
 	"github.com/jadenHsiao/poscom/kernels"
 	"github.com/jadenHsiao/poscom/utils"
 )
@@ -206,6 +207,9 @@ func (printer *Printer) SendMsg(deviceID string, mode string, msgDetail string, 
 		for key, val := range optionalParams {
 			params[key] = val
 		}
+	}
+	if "3" == mode {
+		params["msgDetail"] = hex.EncodeToString([]byte(params["msgDetail"]))
 	}
 	result, err := NewSendMsg().Exec(
 		utils.GenerateParam(utils.ParseParam(params), nil),
